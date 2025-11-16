@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+   Edit Trinder
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Add Trinder</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+           
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+
+
+<div class="container mt-5" dir="rtl">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-light-primary text-primary fw-bold text-center d-flex justify-content-center align-items-center" style="height: 10px; font-size: 18px;">
+             بيانات المناقصة
+        </div>
+        <div class="card-body">
+            <form method="POST" class="row g-3" action="{% url 'tinder:save_tinder' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- العنوان -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">عنوان المناقصة</label>
+                    <input type="text" name="title"  class="form-control">
+                </div>
+
+                <!-- الوصف -->
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">الوصف</label>
+                    <textarea name="descriptions" rows="3" class="form-control"></textarea>
+                </div>
+
+                <!-- الحالة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الحالة</label>
+                    <select name="status" class="form-select">
+                        {% for key, val in status_choices %}
+                            <option value="{{ key }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- تاريخ الفتح -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">تاريخ الفتح</label>
+                    <input type="datetime-local" name="open_date"  class="form-control">
+                </div>
+
+                <!-- تاريخ الإغلاق -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">تاريخ الإغلاق</label>
+                    <input type="datetime-local" name="close_date"  class="form-control">
+                </div>
+
+                <!-- التأمين -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">قيمة التأمين</label>
+                    <input type="number" name="insurance_amount" step="0.01"  class="form-control">
+                </div>
+
+                <!-- نوع التأمين -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">نوع التأمين</label>
+                    <select name="insurance_type" class="form-select">
+                        {% for key, val in insurancetype_choices %}
+                            <option value="{{ key }}" >{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- قيمة العرض -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">قيمة العرض</label>
+                    <input type="number" name="offer_value" step="0.01"  class="form-control">
+                </div>
+
+                <!-- الشركة المعلنة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الشركة المعلنة</label>
+                    <select name="company_by" class="form-select">
+                        <option value="">-- اختر الشركة --</option>
+                        {% for company in company_by %}
+                            
+                            
+                           <option value="{{ company.id }}" >{{company.name}}</option>
+                        {% endfor %}
+                     
+                    </select>
+                </div>
+
+                <!-- الشركة المنافسة الفائزة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الشركة المنافسة</label>
+                    <select name="awared_by" class="form-select">
+                        <option value="">-- اختر الشركة --</option>
+                        {% for item in competitor %}
+                             <option value="{{ item.id }}" >{{ item.name }}</option>
+                                
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- الملف -->
+              <div class="card-header bg-light-primary text-primary fw-bold text-center d-flex justify-content-center align-items-center" style="height: 25px; font-size: 18px;"" style="height: 20%;">
+                            الملف
+               </div>
+
+           <!--begin::Repeater-->
+                <div id="kt_docs_repeater_basic">
+                    <!--begin::Form group-->
+                    <div class="form-group reat_file">
+                        <div data-repeater-list="files_list">
+                            <div data-repeater-item>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">العنوان</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="file_title"  />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">الملف</label>
+                                        <input type="file" class="form-control mb-2 mb-md-0" name="file_upload"  accept=".pdf" />
+                                    </div>
+                                 
+                                    <div class="col-md-4">
+                                        <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                            <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+                                          
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Form group-->
+
+                    <!--begin::Form group-->
+                    <div class="form-group mt-5 show_file">
+                        <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+                            <i class="ki-duotone ki-plus fs-3"></i>
+                            Add
+                        </a>
+                    </div>
+                    <!--end::Form group-->
+                </div>
+           <!--end::Repeater-->
+
+              <!-- الملف -->
+
+              <!-- بنود المناقصة  -->
+                <div class="card-header bg-light-primary text-primary fw-bold text-center d-flex justify-content-center align-items-center" style="height: 25px; font-size: 18px;"" style="height: 20%;">
+                            بنود المناقصة 
+                </div>
+                
+
+           <!--begin::Repeater-->
+                <div id="kt_docs_repeater_basic1">
+                    <!--begin::Form group-->
+                    <div class="form-group reat_file">
+                         <div data-repeater-list="items_list">
+                            <div data-repeater-item>
+                                <div class="form-group row">
+                                    <div class="col-md-5">
+                                        <label class="form-label">البند</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="item" />
+                                    </div>
+                                    <div class="col-md">
+                                        <label class="form-label">الكمية</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="quantity" />
+                                    </div>
+
+                                     <div class="col-md">
+                                        <label class="form-label">سعر التوريد</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="supply_price" />
+                                    </div>
+
+                                      <div class="col-md">
+                                        <label class="form-label">سعر الترسية</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="tinder_price" />
+                                    </div>
+
+                                      <div class="col-md">
+                                        <label class="form-label"> الوحدة</label>
+                                         <input type="text" class="form-control mb-2 mb-md-0" name="unit" />
+                                         
+                                        </select>
+                                    </div>
+
+
+
+                                   
+                                 
+                                    <div class="col-md-1 ">
+                                        <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                            <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+                                            
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Form group-->
+
+                    <!--begin::Form group-->
+                    <div class="form-group mt-5 show_file">
+                        <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+                            <i class="ki-duotone ki-plus fs-3"></i>
+                            Add
+                        </a>
+                    </div>
+                    <!--end::Form group-->
+                </div>
+           <!--end::Repeater-->
+
+                <!-- زر الحفظ -->
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-success px-5">💾 حفظ المناقصة</button>
+                    <a href="" class="btn btn-secondary px-5">رجوع</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock body %}
+
+
+{% block js %}
+    <script src="{% static 'assets/plugins/custom/formrepeater/formrepeater.bundle.js' %}"></script>
+
+    <script>
+        $('#kt_docs_repeater_basic').repeater({
+    initEmpty: false,
+
+    defaultValues: {
+        'text-input': 'foo'
+    },
+
+    show: function () {
+        $(this).slideDown();
+    },
+
+    hide: function (deleteElement) {
+        $(this).slideUp(deleteElement);
+    }
+});
+    </script>
+
+     <script>
+        $('#kt_docs_repeater_basic1').repeater({
+    initEmpty: false,
+
+    defaultValues: {
+        'text-input': 'foo'
+    },
+
+    show: function () {
+        $(this).slideDown();
+    },
+
+    hide: function (deleteElement) {
+        $(this).slideUp(deleteElement);
+    }
+});
+     </script>
+     <script>
+        $(document).ready(function(){
+          $('.reat_file').hide()
+        });
+        $('.show_file').click(function(){
+            $('.reat_file').show()
+        });
+     </script>
+{% endblock js %}
+    
+    
+    
+    

@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Tinders
+{% endblock title %}
+    
+
+{% block css %}
+    <link href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Multipurpose</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <!--begin::Secondary button-->
+              
+                <!--end::Secondary button-->
+                <!--begin::Primary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Add Tinder</a>
+                <!--end::Primary button-->
+            </div>
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+
+<form action="{% url 'tinder:delete_tinder' %}" method="post">
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="delete_tinder">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-danger">Delete Tinder</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-danger">Are You Sure Delete This Tinder ???</p>
+                        <input type="text" class="form-control"  name="name" id="name" readonly>
+
+                        <input type="hidden" name="id" id="id">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Delete Tinder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    <table id="kt_datatable_dom_positioning" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+        <thead>
+            <tr class="fw-bold fs-6 text-gray-800 px-7">
+                <th>ID</th>
+                <th>CODE</th>
+                <th>TITLE</th>
+                <th>OPEN_DATE</th>
+                <th>CLOSE_DATE</th>
+                <th>AWARED</th>
+                <th>COMPANY_BY</th>
+                <th>INSURANCE_AMOUNT</th>
+                <th>INSURANCE_TYPE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for object in tinders %}
+                 <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{object.code}}</td>
+                <td>{{object.title}}</td>
+                <td>{{object.open_date|date:'M,D,Y'}}</td>
+                <td>{{object.close_date|date:'M,D,Y'}}</td>
+            
+                {% if object.awared  %}
+                   <td>{{object.awared}}</td> 
+                {% else %}
+                <td>Not Company awared Now</td>
+                {% endif %}
+                
+                
+                <td>{{object.company_by}}</td>
+                <td>{{object.insurance_amount}}</td>
+                <td>{{object.insurance_type}}</td>
+                
+                <td>{{object.status}}</td>
+                    <td>
+                        <div class="me-0">
+                                        <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <i class="ki-solid ki-dots-horizontal fs-2x"></i>
+                                        </button>
+                                        <!--begin::Menu 3-->
+                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true" style="">
+                                            <!--begin::Heading-->
+                                            <div class="menu-item px-3">
+                                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Action</div>
+                                            </div>
+                                            <!--end::Heading-->
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item  px-3 ">
+                                                <a class=" menu-link " href="" data-bs-toggle="modal" data-bs-target="#delete_tinder"
+                                                data-id="{{object.id}}"
+                                                data-name="{{object.title}}"
+                                                 >Delete Tinder</a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                            
+                                                <!--begin::Menu item-->
+                                            <div class="menu-item  px-3">
+                                                <a href="{% url 'tinder:detail_tinder' object.id %}" class="menu-link px-3">Detials</a>
+                                            </div>
+                                            <!--end::Menu item-->
+
+                                               <!--begin::Menu item-->
+                                            <div class="menu-item  px-3">
+                                                <a href="{% url 'tinder:edit_tinder' object.id %}" class="menu-link px-3">Edit Tinder</a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                        
+                                        
+                                        
+                                        </div>
+                                        <!--end::Menu 3-->
+                        </div>
+                    </td>
+            </tr> 
+            {% endfor %}
+                
+          
+          
+        </tbody>
+    </table>
+    
+{% endblock body %}
+
+
+{% block js %}
+    <script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+    <script>
+        $("#kt_datatable_dom_positioning").DataTable({
+	"language": {
+		"lengthMenu": "Show _MENU_",
+	},
+	"dom":
+		"<'row mb-2'" +
+		"<'col-sm-6 d-flex align-items-center justify-conten-start dt-toolbar'l>" +
+		"<'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
+		">" +
+
+		"<'table-responsive'tr>" +
+
+		"<'row'" +
+		"<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+		"<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+		">"
+});
+    </script>
+     <script>
+            $('#delete_tinder').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('name')
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #name').val(name);
+    
+    });
+    </script>
+
+{% endblock js %}
+    
+    
+    
+    

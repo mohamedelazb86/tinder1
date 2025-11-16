@@ -1,0 +1,620 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+   Edit Trinder
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Edit Trinder</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+           
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+
+<!-- MODAL FILE  edit -->
+ <form action="{% url 'tinder:edit_tinder_file' %}" method="post" enctype="multipart/form-data" >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="update_file">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update File</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p>هل تريد تعديل هذا الملف ؟؟؟</p>
+                    <input type="text" name="title" id="title">
+                    <input type="file" name="file_name">
+                    <input type="hidden" name="id" id="id">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">تعديل الملف </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- END MODEL FILE  edit-->
+
+<!-- MODAL FILE  delete -->
+ <form action="{% url 'tinder:delete_file' tinder.id %}" method="post" enctype="multipart/form-data" >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="delete_file">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Delete File</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-danger">هل تريد حذف هذا الملف ؟؟؟</p>
+                    <input type="text" name="title" id="title">
+                   
+                    <input type="hidden" name="id" id="id">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">حذف الملف </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- END MODEL FILE  delete-->
+
+
+<!-- MODAL item  edit -->
+ <form action="{% url 'tinder:edit_item' %}" method="post"  >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="update_item">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update Item</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p>هل تريد تعديل هذا البند ؟؟؟</p>
+                    <input type="hidden" name="id" id="id">
+                    <input type="text" class="form-control" name="item" id="item">
+                    <input type="text" class="form-control" name="quantity" id="quantity">
+                    <input type="text" class="form-control" name="code" id="code">
+                    <input type="text" class="form-control" name="supply_price" id="supply_price">
+                    <input type="text" class="form-control" name="tinder_price" id="tinder_price">
+                    <input type="text" class="form-control" name="unit" id="unit">
+                   
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">تعديل البند </button>
+                </div>
+            </div>
+        </div>
+    </div>
+ </form>
+<!-- END MODEL item  edit-->
+
+<!-- MODAL FILE  delete -->
+ <form action="{% url 'tinder:delete_item' %}" method="post"  >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="delete_item">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Delete Item</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-danger">هل تريد حذف هذا البند ؟؟؟</p>
+                    <input type="text" name="title" id="title">
+                   
+                    <input type="hidden" name="id" id="id">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">حذف البند </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- END MODEL FILE  delete-->
+
+
+
+
+
+<div class="container mt-5" dir="rtl">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white fw-bold text-center d-flex justify-content-center align-items-center" style="height: 40px; font-size: 18px;border-radius: 50%;">
+            تعديل بيانات المناقصة
+        </div>
+        <div class="card-body">
+            <form method="POST" class="row g-3" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- العنوان -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">عنوان المناقصة</label>
+                    <input type="text" name="title" value="{{ tinder.title }}" class="form-control">
+                </div>
+
+                <!-- الوصف -->
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">الوصف</label>
+                    <textarea name="descriptions" rows="3" class="form-control">{{ tinder.descriptions }}</textarea>
+                </div>
+
+                <!-- الحالة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الحالة</label>
+                    <select name="status" class="form-select">
+                        {% for key, val in status_choices %}
+                            <option value="{{ key }}" {% if tinder.status == key %}selected{% endif %}>{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- تاريخ الفتح -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">تاريخ الفتح</label>
+                    <input type="datetime-local" name="open_date" value="{{ tinder.open_date|date:'Y-m-d\\TH:i' }}" class="form-control">
+                </div>
+
+                <!-- تاريخ الإغلاق -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">تاريخ الإغلاق</label>
+                    <input type="datetime-local" name="close_date" value="{{ tinder.close_date|date:'Y-m-d\\TH:i' }}" class="form-control">
+                </div>
+
+                <!-- التأمين -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">قيمة التأمين</label>
+                    <input type="number" name="insurance_amount" step="0.01" value="{{ tinder.insurance_amount }}" class="form-control">
+                </div>
+
+                <!-- نوع التأمين -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">نوع التأمين</label>
+                    <select name="insurance_type" class="form-select">
+                        {% for key, val in insurancetype%}
+                            <option value="{{ key }}" {% if tinder.insurance_type == key %}selected{% endif %}>{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- قيمة العرض -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">قيمة العرض</label>
+                    <input type="number" name="offer_value" step="0.01" value="{{ tinder.offer_value }}" class="form-control">
+                </div>
+
+                <!-- الشركة المعلنة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الشركة المعلنة</label>
+                    <select name="company_by" class="form-select">
+                        <option value="">-- اختر الشركة --</option>
+                        {% for company in awared_by %}
+                            
+                            
+                           <option value="{{ company.id }}" {% if tinder.company_by_id == company.id %}selected{% endif %}>{{company.name}}</option>
+                        {% endfor %}
+                     
+                    </select>
+                </div>
+
+                <!-- الشركة المنافسة الفائزة -->
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">الشركة المنافسة</label>
+                    <select name="awared_byy" class="form-select">
+                        <option value="">-- اختر الشركة --</option>
+                        {% for item in competitor %}
+                             <option value="{{ item.id }}" {% if tinder.awared_by_id == item.id %}selected{% endif %}>{{ item.name }}</option>
+                                
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+              <div class="card-header bg-primary text-white fw-bold text-center d-flex justify-content-center align-items-center" style="height: 50%;width: 200px; font-size: 15px;border-radius: 50%;">
+                    الملف
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped gy-7 gs-7" style="width: 70%;">
+                
+                {% if tinder_file %}
+                    <thead>
+                        <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                            <th>التسلسل</th>
+                            <th>اسم الملف</th>
+                            <th>Action </th>
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                       
+                              {% for item in tinder_file %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{item.title}}</td>
+                                    <td ><a href="{{item.files.url}}" class="btn btn-warning" target="_blank">عرض</a>
+
+                                    <a href="#" class="btn btn-primary" data-bs-target="#update_file" data-bs-toggle="modal"
+                                        data-id="{{item.id}}"
+                                        data-title="{{item.title}}"
+                                        data-files="{{item.file_name}}">تعديل</a>
+
+                                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_file"
+                                        data-id="{{item.id}}"
+                                        data-title="{{item.title}}">حذف</a> </td>
+                                    
+                                </tr>
+                      
+                              {% endfor %}
+                      
+                    
+                    </tbody>
+                {% else %}
+                        <strong class="text-danger">sorry there are not any files here !!</strong>
+                {% endif %}
+                  
+                </table>
+              </div>
+
+                 <!--begin::Repeater-->
+                <div id="kt_docs_repeater_basic ">
+                    <!--begin::Form group-->
+                    <div class="form-group reat_file">
+                        <div data-repeater-list="file_list">
+                            <div data-repeater-item>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">العنوان</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="file_title" >
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">الملف</label>
+                                        <input type="file" class="form-control mb-2 mb-md-0" name="file_upload" >
+                                    </div>
+                                 
+                                    <div class="col-md-4 show_file">
+                                        <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                            <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Form group-->
+
+                    <!--begin::Form group-->
+                    <div class="form-group mt-5 show_file">
+                        <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+                            <i class="ki-duotone ki-plus fs-3"></i>
+                            Add
+                        </a>
+                    </div>
+                    <!--end::Form group-->
+                </div>
+                <!--end::Repeater-->
+
+              <div class="card-header bg-primary text-white fw-bold text-center d-flex justify-content-center align-items-center" style="height: 50%;width: 200px; font-size: 15px;border-radius: 50%;">
+                    البنود
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped gy-7 gs-7" style="width: 70%;">
+                
+                {% if tinder_item  %}
+                    <thead>
+                        <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                            <th>التسلسل</th>
+                            <th>اسم البند</th>
+                            <th>الكمية</th>
+                            <th>الكود</th>
+                            <th>سعر التوريد</th>
+                            <th>سعر الترسية </th>
+                            <th> الوحدة</th>
+                            <th> Action</th>
+                            <th> </th>
+                            
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                
+                {% for object in tinder_item %}
+                   <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{object.item}}</td>
+                        <td>{{object.quantity}}</td>
+                        <td>{{object.code}}</td>
+                        <td>{{object.supply_price}}</td>
+                        <td>{{object.tinder_price}}</td>
+                        <td>{{object.unit}}</td>
+                            <td ><a href="#" class="btn btn-primary" data-bs-target="#update_item" data-bs-toggle="modal"
+                                data-id="{{object.id}}"
+                                data-item="{{object.item}}"
+                                data-quantity="{{object.quantity}}"
+                                data-code="{{object.code}}"
+                                data-supply_price="{{object.supply_price}}"
+                                data-tinder_price="{{object.tinder_price}}"
+                                data-unit="{{object.unit}}" >تعديل</a></td>
+
+                        <td><a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_item"
+                            data-id="{{object.id}}"
+                            data-item="{{object.item}}" >حذف</a> </td>
+                        
+                        
+                    </tr> 
+                {% endfor %}
+                    
+                    
+                    
+                    </tbody> 
+                
+                {% else %}
+                    <strong class="text-danger">sorry there are no any item her</strong>
+                {% endif %}
+                    
+                   
+                </table>
+              </div>
+
+                <!-- الملف -->
+                <div class="col-md-6">
+                <label class="form-label fw-bold">الملف</label>
+                   
+              
+                </div>
+
+                <!--begin::Repeater-->
+                <div id="kt_docs_repeater_basic1">
+                    <!--begin::Form group-->
+                    <div class="form-group reat_file">
+                        <div data-repeater-list="items_list">
+                            <div data-repeater-item>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">البند</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="item" >
+                                    </div>
+                                    <div class="col-md">
+                                        <label class="form-label">الكمية</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="quantity" >
+                                    </div>
+                                     <div class="col-md">
+                                        <label class="form-label">الكود</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="code" >
+                                    </div>
+                                     <div class="col-md">
+                                        <label class="form-label">سعر التوريد</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="supply_price" >
+                                    </div>
+                                  <div class="col-md">
+                                        <label class="form-label">سعر الترسية</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="tinder_price" >
+                                    </div>
+
+                                      <div class="col-md">
+                                        <label class="form-label">الفئة</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="unit" >
+                                    </div>
+                                 
+                                 
+                                 
+                                    <div class="col-md">
+                                        <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                            <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+                                            
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Form group-->
+
+                    <!--begin::Form group-->
+                    <div class="form-group mt-5 show_file">
+                        <a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+                            <i class="ki-duotone ki-plus fs-3"></i>
+                            Add
+                        </a>
+                    </div>
+                    <!--end::Form group-->
+                </div>
+                <!--end::Repeater-->
+
+                <!-- زر الحفظ -->
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-success px-5">💾 حفظ التعديلات</button>
+                    <a href="" class="btn btn-secondary px-5">رجوع</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock body %}
+
+
+{% block js %}
+    <script src="{% static 'assets/plugins/custom/formrepeater/formrepeater.bundle.js' %}"></script>
+    <script>
+        $('#kt_docs_repeater_basic').repeater({
+    initEmpty: false,
+
+    defaultValues: {
+        'text-input': 'foo'
+    },
+
+    show: function () {
+        $(this).slideDown();
+    },
+
+    hide: function (deleteElement) {
+        $(this).slideUp(deleteElement);
+    }
+});
+    </script>
+
+    <script>
+        $('#kt_docs_repeater_basic1').repeater({
+    initEmpty: false,
+
+    defaultValues: {
+        'text-input': 'foo'
+    },
+
+    show: function () {
+        $(this).slideDown();
+    },
+
+    hide: function (deleteElement) {
+        $(this).slideUp(deleteElement);
+    }
+});
+    </script>
+
+     <script>
+            $('#update_file').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('title')
+        var file_name = button.data('file_name')
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #title').val(name);
+        modal.find('.modal-body #file_name').val(file_name);
+    
+    });
+     </script>
+
+    <script>
+            $('#delete_file').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('title')
+        var file_name = button.data('file_name')
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #title').val(name);
+        modal.find('.modal-body #file_name').val(file_name);
+    
+    });
+    </script>
+
+     <script>
+            $('#update_item').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('item')
+        var quantity = button.data('quantity')
+        var code = button.data('code')
+        var supply_price = button.data('supply_price')
+        var tinder_price = button.data('tinder_price')
+        var unit = button.data('unit')
+       
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #item').val(name);
+        modal.find('.modal-body #quantity').val(quantity);
+        modal.find('.modal-body #code').val(code);
+        modal.find('.modal-body #supply_price').val(supply_price);
+        modal.find('.modal-body #tinder_price').val(tinder_price);
+        modal.find('.modal-body #unit').val(unit);
+        
+    
+    });
+     </script>
+
+    <script>
+            $('#delete_item').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('item')
+       
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #title').val(name);
+        
+    
+    });
+    </script>
+     <script>
+        $(document).ready(function(){
+          $('.reat_file').hide()
+        });
+        $('.show_file').click(function(){
+            $('.reat_file').show()
+        });
+     </script>
+{% endblock js %}
+    
+    
+    
+    

@@ -1,0 +1,27 @@
+
+{% load static %}
+
+<link href="{% static 'assets/custom/notify/css/notifIt.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'assets/custom/notify/js/notifIt.js' %}"></script>
+<script src="{% static 'assets/custom/notify/js/notifit-custom.js' %}"></script>
+
+
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+
+    <script>
+      window.onload = function() {
+          notif({
+              msg: "{{message}}",
+              type: "{{message.tags}}"
+          })
+      }
+
+  </script>
+
+    {% endfor %}
+</div>
+{% endif %}
+
