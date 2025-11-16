@@ -1,0 +1,114 @@
+@font-face {
+  font-family: myfont;
+  src: url(GoudaFont1.ttf);
+}
+
+
+body{
+ font-family:myfont ;
+ font-size: 25px;
+ font-weight: bolder;
+ font-size: xx-large;
+}
+
+/* تنسيق أساسي موحد لكل الجداول */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-family: "Cairo", sans-serif;
+  font-size: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* رأس الجدول */
+thead tr {
+  background-color: #0096c7;
+  padding: 12px;
+  color: #fff;
+  text-align: center; /* توسيط العناوين */
+  font-weight: bold;
+}
+
+/* خلايا الرأس */
+thead th {
+  padding: 12px;
+  text-align: center; /* تأكيد توسيط العناوين */
+  vertical-align: middle;
+  color:white  !important;
+  
+}
+
+/* خلايا الجسم */
+tbody td {
+  padding: 10px 12px;
+  text-align: center; /* توسيط النصوص داخل الصفوف */
+  vertical-align: middle;
+  border-bottom: 1
+}
+
+/* تنسيق عام لكل الجداول في الموقع */
+
+/* توسيط العناوين داخل الجدول DataTables */
+.dataTable thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+/* توسيط القيم داخل الصفوف */
+.dataTable tbody td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+
+/* تنسيق الصورة داخل الجدول */
+table td img {
+  width: 90px;            /* حجم مناسب للصورة */
+  height: 90px;           /* ارتفاع مناسب */
+  object-fit: cover;      /* قص الصورة للحفاظ على الشكل */
+  border-radius: 50%;     /* يجعلها دائرية (مثل الصورة الشخصية) */
+  border: 2px solid #e9ecef; /* حدود خفيفة أنيقة */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* ظل بسيط */
+  transition: transform 0.2s ease-in-out;
+}
+
+/* تأثير عند المرور بالماوس */
+table td img:hover {
+  transform: scale(1.1); /* تكبير بسيط عند المرور */
+  border-color: #0096c7; /* تغيير لون الإطار عند المرور */
+}
+
+
+/* الدائرة الصغيرة */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/* الحالة النشطة */
+.active-status {
+  color: green;
+  font-weight: 600;
+}
+
+.active-status .dot {
+  background-color: green;
+}
+
+/* الحالة غير النشطة */
+.inactive-status {
+  color: red;
+  font-weight: 600;
+}
+
+.inactive-status .dot {
+  background-color: red;
+}
+
