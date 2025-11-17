@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    DashBoard
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">إضافة خزينة</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <!--begin::Secondary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Rollover</a>
+                <!--end::Secondary button-->
+               
+            </div>
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+ <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+
+                <div class="card p-4">
+                    <h3 class="text-center mb-4">إضافة خزينة جديدة</h3>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- اسم الخزينة -->
+                        <div class="mb-3">
+                            <label class="form-label">اسم الخزينة</label>
+                            <input type="text" name="name" class="form-control"  required>
+                        </div>
+
+                        <!-- النوع -->
+                        <div class="mb-3">
+                            <label class="form-label">نوع الخزينة</label>
+                            <select name="type" class="form-select" required>
+                                <option value="">اختر النوع</option>
+                                <option value="CASH">نقدي</option>
+                                <option value="CHEQUE">شيكات</option>
+                            </select>
+                        </div>
+
+                        <!-- رئيسية / غير رئيسية -->
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" name="is_main">
+                            <label class="form-check-label">هل هي الخزينة الرئيسية؟</label>
+                        </div>
+
+                        <!-- نشطة / غير نشطة -->
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" name="is_active" checked>
+                            <label class="form-check-label">الخزينة نشطة</label>
+                        </div>
+
+                        <!-- أمين الخزينة -->
+                        <div class="mb-3">
+                            <label class="form-label">أمين الخزينة</label>
+                            <select name="treasurer" class="form-select">
+                                <option value="">بدون</option>
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- التفاصيل -->
+                        <div class="mb-3">
+                            <label class="form-label">تفاصيل / ملاحظات</label>
+                            <textarea name="details" rows="4" class="form-control" ></textarea>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">حفظ الخزينة</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+{% endblock body %}
+
+
+   
+
+{% block js %}
+    
+{% endblock js %}
+    
+    
+    
+    

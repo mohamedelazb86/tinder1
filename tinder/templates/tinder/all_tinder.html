@@ -20,7 +20,7 @@
             <!--begin::Page title-->
             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                 <!--begin::Title-->
-                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Multipurpose</h1>
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">كل المناقصات</h1>
                 <!--end::Title-->
             
             </div>
@@ -31,7 +31,7 @@
               
                 <!--end::Secondary button-->
                 <!--begin::Primary button-->
-                <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Add Tinder</a>
+                <a href="{% url 'tinder:add_tinder' %}" class="btn btn-sm fw-bold btn-primary" >إضافة مناقصة</a>
                 <!--end::Primary button-->
             </div>
             <!--end::Actions-->
@@ -47,7 +47,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title text-danger">Delete Tinder</h3>
+                    <h3 class="modal-title text-danger">حذف مناقصة</h3>
 
                     <!--begin::Close-->
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -57,15 +57,15 @@
                 </div>
 
                 <div class="modal-body">
-                    <p class="text-danger">Are You Sure Delete This Tinder ???</p>
+                    <p class="text-danger">هل تريد حذف المناقصة ؟؟؟</p>
                         <input type="text" class="form-control"  name="name" id="name" readonly>
 
                         <input type="hidden" name="id" id="id">
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Delete Tinder</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">تراجع</button>
+                    <button type="submit" class="btn btn-primary">حذف المناقصة</button>
                 </div>
             </div>
         </div>
@@ -75,17 +75,17 @@
     <table id="kt_datatable_dom_positioning" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
         <thead>
             <tr class="fw-bold fs-6 text-gray-800 px-7">
-                <th>ID</th>
-                <th>CODE</th>
-                <th>TITLE</th>
-                <th>OPEN_DATE</th>
-                <th>CLOSE_DATE</th>
-                <th>AWARED</th>
-                <th>COMPANY_BY</th>
-                <th>INSURANCE_AMOUNT</th>
-                <th>INSURANCE_TYPE</th>
-                <th>STATUS</th>
-                <th>ACTION</th>
+                <th>التسلسل</th>
+                <th>الكود</th>
+                <th>العنوان</th>
+                <th>تاريخ بداية المناقصة</th>
+                <th>تاريخ نهاية المناقصة</th>
+                <th>الفائز بها</th>
+                <th>الشركة المعلنة</th>
+                <th>مبلغ التأمين</th>
+                <th>نوع التأمين</th>
+                <th>حالة المناقصة</th>
+                <th>العمليات</th>
             </tr>
         </thead>
         <tbody>
@@ -119,7 +119,7 @@
                                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true" style="">
                                             <!--begin::Heading-->
                                             <div class="menu-item px-3">
-                                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Action</div>
+                                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">العمليات</div>
                                             </div>
                                             <!--end::Heading-->
                                             <!--begin::Menu item-->
@@ -127,19 +127,19 @@
                                                 <a class=" menu-link " href="" data-bs-toggle="modal" data-bs-target="#delete_tinder"
                                                 data-id="{{object.id}}"
                                                 data-name="{{object.title}}"
-                                                 >Delete Tinder</a>
+                                                 >حذف المناقصة</a>
                                             </div>
                                             <!--end::Menu item-->
                                             
                                                 <!--begin::Menu item-->
                                             <div class="menu-item  px-3">
-                                                <a href="{% url 'tinder:detail_tinder' object.id %}" class="menu-link px-3">Detials</a>
+                                                <a href="{% url 'tinder:detail_tinder' object.id %}" class="menu-link px-3">التفاصيل</a>
                                             </div>
                                             <!--end::Menu item-->
 
                                                <!--begin::Menu item-->
                                             <div class="menu-item  px-3">
-                                                <a href="{% url 'tinder:edit_tinder' object.id %}" class="menu-link px-3">Edit Tinder</a>
+                                                <a href="{% url 'tinder:edit_tinder' object.id %}" class="menu-link px-3">تعديل المناقصة</a>
                                             </div>
                                             <!--end::Menu item-->
                                         

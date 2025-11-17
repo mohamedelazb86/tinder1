@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    تعديل الخزينة
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">تعديل الخزينة</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+         
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <div class="card p-4">
+                <h3 class="text-center mb-4">تعديل بيانات الخزينة</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- اسم الخزينة -->
+                    <div class="mb-3">
+                        <label class="form-label">اسم الخزينة</label>
+                        <input type="text" name="name" class="form-control"  value="{{ cashbox.name }}" required>
+                    </div>
+
+                    <!-- النوع -->
+                    <div class="mb-3">
+                        <label class="form-label">نوع الخزينة</label>
+                        <select name="type" class="form-select" required>
+                            <option value="CASH" {% if cashbox.type == 'CASH' %}selected{% endif %}>نقدي</option>
+                            <option value="CHEQUE" {% if cashbox.type == 'CHEQUE' %}selected{% endif %}>شيكات</option>
+                        </select>
+                    </div>
+
+                    <!-- رئيسية -->
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="is_main"
+                               {% if cashbox.is_main %}checked{% endif %}>
+                        <label class="form-check-label">الخزينة الرئيسية</label>
+                    </div>
+
+                    <!-- نشطة -->
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="is_active"
+                               {% if cashbox.is_active %}checked{% endif %}>
+                        <label class="form-check-label">الخزينة نشطة</label>
+                    </div>
+
+                    <!-- أمين الخزينة -->
+                    <div class="mb-3">
+                        <label class="form-label">أمين الخزينة</label>
+                        <select name="treasurer" class="form-select">
+                            <option value="">بدون</option>
+                            {% for user in users %}
+                                <option value="{{ user.id }}" 
+                                    {% if cashbox.treasurer and cashbox.treasurer.id == user.id %}
+                                        selected
+                                    {% endif %}>
+                                    {{ user.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- التفاصيل -->
+                    <div class="mb-3">
+                        <label class="form-label">تفاصيل</label>
+                        <textarea name="details" rows="4" class="form-control">{{ cashbox.details }}</textarea>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">تحديث البيانات</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+    
+{% endblock body %}
+
+
+{% block js %}
+    
+{% endblock js %}
+    
+    
+    
+    

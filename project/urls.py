@@ -31,6 +31,8 @@ urlpatterns = [
     path('authuser/',include('authuser.urls'),),
     
     path('tinder/',include('tinder.urls')),
+
+    path('accounting/',include('accounting.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

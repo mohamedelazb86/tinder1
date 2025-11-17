@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'tinder',
     'contact',
 
+    'accounting',
+
 ]
 
 MIDDLEWARE = [

@@ -29,8 +29,8 @@ class Tinder(models.Model):
     status=models.CharField(max_length=75,choices=STATUS_TINDER)
     
     created_at=models.DateTimeField(default=timezone.now())
-    open_date=models.DateTimeField()
-    close_date=models.DateTimeField()
+    open_date=models.DateField()
+    close_date=models.DateField()
     insurance_amount=models.FloatField()
     insurance_type=models.CharField(max_length=120,choices=INSURANCE_TYPE)
     awared_by=models.ForeignKey(Competitor,related_name='tinder_supplier',on_delete=models.SET_NULL,null=True,blank=True) # الشركات المنافسة

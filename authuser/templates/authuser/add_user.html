@@ -84,33 +84,33 @@
 <div class="container-fluid py-5">
 
     <div class="form-card">
-        <h2 class="section-title mb-4">Add New User</h2>
+        <h2 class="section-title mb-4">إضافة موظف جديد</h2>
         <form action="{% url 'authuser:save_user' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Basic Info -->
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
-                    <label>Full Name <span class="text-danger">*</span></label>
-                    <input type="text" name="full_name" class="form-control" placeholder="Enter full name">
+                    <label>الاسم<span class="text-danger">*</span></label>
+                    <input type="text" name="full_name" class="form-control" >
                 </div>
 
                 <div class="col-md-4">
-                    <label>Phone / WhatsApp</label>
-                    <input type="text" name="phone" class="form-control" placeholder="Enter phone number">
+                    <label>التليفون / الواتس</label>
+                    <input type="text" name="phone" class="form-control" >
                 </div>
 
                 <div class="col-md-4">
-                    <label>Profile Image</label>
+                    <label>الصورة</label>
                     <input type="file" name="image" accept=".png, .jpg, .jpeg" class="form-control">
                 </div>
             </div>
 
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
-                    <label>Sector</label>
+                    <label>القطاع</label>
                     <select name="sector" class="form-select">
-                        <option value="">Select Sector...</option>
+                        <option value="">اختار القطاع...</option>
                         {% for item in sectors %}
                             <option value="{{item.id}}">{{item}}</option>
                         {% endfor %}
@@ -118,58 +118,59 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label>Job Title</label>
-                    <input type="text" name="job" class="form-control" placeholder="Enter job title">
+                    <label>الوظيفة</label>
+                    <input type="text" name="job" class="form-control" >
                 </div>
 
                 <div class="col-md-4">
-                    <label>Email Address</label>
-                    <input type="email" name="email" class="form-control" placeholder="Enter email address">
+                    <label>الايميل</label>
+                    <input type="email" name="email" class="form-control" >
                 </div>
             </div>
 
             <div class="mb-4">
-                <label>Details</label>
-                <textarea name="target_details" class="form-control" rows="3" placeholder="Write details here..."></textarea>
+                <label>التفاصيل</label>
+                <textarea name="target_details" class="form-control" rows="3" ></textarea>
             </div>
 
             <div class="divider"></div>
 
             <!-- Account Info -->
-            <h2 class="section-title mb-3">Account Information</h2>
+            <h2 class="section-title mb-3">معلومات الحساب</h2>
 
-            <div class="row g-4 mb-4">
-                <div class="col-md-4">
-                    <label>Username <span class="text-danger">*</span></label>
+            <div class="row g-4 ">
+                <div class="col">
+                    <label>أسم المستخدم <span class="text-danger">*</span></label>
                     <input type="text" name="username" class="form-control" placeholder="Enter username">
                 </div>
 
-                <div class="col-md-4">
-                    <label>Password <span class="text-danger">*</span></label>
-                    <input type="password" name="password1" class="form-control" placeholder="Enter password">
+                <div class="col">
+                    <label>كلمة السر <span class="text-danger">*</span></label>
+                    <input type="password" name="password1" class="form-control" >
                 </div>
 
-                <div class="col-md-4">
-                    <label>Confirm Password</label>
-                    <input type="password" name="password2" class="form-control" placeholder="Re-enter password">
+                <div class="col">
+                    <label>تاكيد كلمة السر</label>
+                    <input type="password" name="password2" class="form-control" >
                 </div>
-            </div>
-
-            <div class="row g-4 mb-4">
-                <div class="col-md-4">
-                    <label>Status</label>
+            
+                <div class="col">
+                    <label>الحالة</label>
                     <select name="active" class="form-select">
-                        <option value="">Select action...</option>
-                        <option value="1" class="text-success">Active</option>
-                        <option value="0" class="text-danger">De-Active</option>
+                        <option value="">أختار الحالة...</option>
+                        <option value="1" class="text-success">نشط</option>
+                        <option value="0" class="text-danger">غير نشط</option>
                     </select>
                 </div>
+           
             </div>
 
+          
+
             <div class="text-center mt-4">
-                <button type="reset" class="btn btn-light me-3">Cancel</button>
+                <button type="reset" class="btn btn-light me-3">تراجع</button>
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-person-plus-fill me-2"></i> Save User
+                    <i class="bi bi-person-plus-fill me-2"></i> اضافة مستخدم جديد
                 </button>
             </div>
         </form>
