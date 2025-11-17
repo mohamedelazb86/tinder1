@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('active',views.active_cashbox,name='active'),
     path('deactive',views.deactive,name='deactive'),
+
+    path('all_transaction',views.all_transaction,name='all_transaction'),
 ]

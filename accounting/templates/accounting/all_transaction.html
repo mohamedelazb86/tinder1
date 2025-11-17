@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    حركة الخزينة
+{% endblock title %}
+
+{% block css %}
+    <link href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock css %}
+
+{% block body %}
+
+<!--begin::Toolbar-->
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+
+        <!--begin::Page title-->
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+
+            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                حركة الخزينة :   <p class="text-danger">{{ request.user }}</p>
+             </h1>
+
+        </div>
+        <!--end::Page title-->
+
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
+                إضافة حركة
+            </a>
+        </div>
+
+    </div>
+</div>
+<!--end::Toolbar-->
+
+<!-- 📌 صندوق الأزرار + الملخص -->
+<div class="card p-4 mb-5 shadow-sm">
+
+    <div class=" mb-4">
+
+        <!-- 🔵 زر إضافة إيراد -->
+        <a href="#" class="btn btn-success fw-bold px-4 py-2 mb-2">
+            إضافة إيراد
+        </a>
+
+        <!-- 🔴 زر إضافة مصروف -->
+        <a href="#" class="btn btn-danger fw-bold px-4 py-2 mb-2">
+            إضافة مصروف
+        </a>
+
+        <!-- 🟦 زر التقارير -->
+        <a href="#" class="btn btn-primary fw-bold px-4 py-2 mb-2">
+            التقارير
+        </a>
+
+    </div>
+
+    <!-- 🟨 البوكسات الثلاثة -->
+    <div class="row text-center">
+
+        <!-- 🟩 رصيد الخزينة -->
+        <div class="col-md-4 mb-3">
+            <div class="p-3 rounded text-white fw-bold" style="background:#007bff;">
+                رصيد الخزينة:
+                <span class="fs-4">{{ total_balance|default:"0" }}</span>
+            </div>
+        </div>
+
+        <!-- 🟦 إجمالي الإيرادات -->
+        <div class="col-md-4 mb-3">
+            <div class="p-3 rounded text-white fw-bold" style="background:#28a745;">
+                إجمالي الإيرادات:
+                <span class="fs-4">{{ total_income|default:"0" }}</span>
+            </div>
+        </div>
+
+        <!-- 🟥 إجمالي المصروفات -->
+        <div class="col-md-4 mb-3">
+            <div class="p-3 rounded text-white fw-bold" style="background:#dc3545;">
+                إجمالي المصروفات:
+                <span class="fs-4">{{ total_expenses|default:"0" }}</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 🔥 اختيار الخزينة -->
+<div class="card mb-5 p-4  col-6">
+    <form method="GET" class="mb-3">
+        <label class="form-label fw-bold fs-5">اختر الخزينة:</label>
+        <select name="cashbox" class="form-select form-select-lg" onchange="this.form.submit()">
+            <option value="">-- عرض جميع الخزن --</option>
+
+            {% for cb in cashboxs %}
+                <option value="{{ cb.id }}" 
+                    {% if selected_id == cb.id|stringformat:"s" %}selected{% endif %}>
+                    {{ cb.name }} ({{ cb.get_type_display }})
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<!-- جدول عرض الحركة -->
+<table id="kt_datatable_dom_positioning" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+    <thead>
+        <tr class="fw-bold fs-6 text-gray-800 px-7">
+            <th>التسلسل</th>
+            <th>الخزينة</th>
+            <th>تاريخ الايصال</th>
+            <th>رقم الايصال</th>
+            <th>البيان</th>
+            <th>التصنيف</th>
+            <th>البند</th>
+            <th>الوارد</th>
+            <th>المنصرف</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in transactions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ item.cashbox }}</td>
+
+            <td>{{ item.date_transaction|date:'D-M-Y' }}</td>
+
+            <td>{{ item.no }}</td>
+
+            <td>
+                {% if item.details %}
+                    {{ item.details }}
+                {% else %}
+                    <span class="badge bg-danger">لا يوجد بنود</span>
+                {% endif %}
+            </td>
+
+            <td>{{ item.category }}</td>
+
+            <td>
+                {% if item.inbox %}
+                    <span class="badge bg-success">وارد</span>
+                {% else %}
+                    <span class="badge bg-danger">منصرف</span>
+                {% endif %}
+            </td>
+
+            {% if item.inbox %}
+                <td>{{ item.inbox }}</td>
+            {% else %}
+                <td>0</td>
+            {% endif %}
+
+            {% if item.absentminded %}
+                <td>{{ item.absentminded }}</td>
+            {% else %}
+                <td>0</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock body %}
+
+{% block js %}
+    <script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+    <script>
+        $("#kt_datatable_dom_positioning").DataTable({
+            "language": {"lengthMenu": "Show _MENU_"},
+            "dom":
+                "<'row mb-2'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start dt-toolbar'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+        });
+    </script>
+{% endblock js %}

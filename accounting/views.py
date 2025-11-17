@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import CashBox
+from .models import CashBox,CashTransaction
 from authuser.models import User
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from . import models
+
 
 
 @login_required
@@ -96,3 +98,43 @@ def deactive(request):
         messages.success(request,'تم  إيقاف التنشيط بنجاح ')
         
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+# @login_required   
+# def all_transaction(request):
+#     cashboxs=CashBox.objects.filter(treasurer=request.user)
+#     transactions=CashTransaction.objects.filter(cashbox__in=cashboxs)
+
+#     context={
+#         'transactions':transactions
+#     }
+#     return render(request,'accounting/all_transaction.html',context)
+
+from django.db.models import Sum
+@login_required
+def all_transaction(request):
+
+    cashboxs = CashBox.objects.filter(treasurer=request.user)
+
+    selected_id = request.GET.get('cashbox')
+
+    if selected_id:
+        transactions = CashTransaction.objects.filter(cashbox_id=selected_id)
+    else:
+        transactions = CashTransaction.objects.filter(cashbox__in=cashboxs)
+
+    # حسابات الإيرادات والمصروفات
+    total_income = transactions.aggregate(total=Sum('inbox'))['total'] or 0
+    total_expenses = transactions.aggregate(total=Sum('absentminded'))['total'] or 0
+    total_balance = total_income - total_expenses
+
+    context = {
+        'transactions': transactions,
+        'cashboxs': cashboxs,
+        'selected_id': selected_id,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'total_balance': total_balance,
+    }
+
+    return render(request, 'accounting/all_transaction.html', context)
+

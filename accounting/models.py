@@ -30,6 +30,7 @@ class CashTransaction(models.Model):        # حركة الخزينة
     category=models.ForeignKey('Category',related_name='transaction_category',on_delete=models.SET_NULL,null=True,blank=True)
     inbox=models.FloatField(null=True,blank=True)       # الوارد
     absentminded=models.FloatField(null=True,blank=True)  # المنصرف
+    details=models.TextField(max_length=1500,null=True,blank=True)
 
     def __str__(self):
         return str(self.category)
