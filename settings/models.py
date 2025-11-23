@@ -12,4 +12,11 @@ class Sector(models.Model):
 
     def __str__(self):
         return self.name
+
+class Location(models.Model):
+    name=models.CharField(max_length=120)
+    notes=models.TextField(max_length=1500)
+
+    def __str__(self):
+        return self.name
     

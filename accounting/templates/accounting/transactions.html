@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    my transaction
+{% endblock title %}
+    
+
+{% block css %}
+        <link href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css"/>
+  
+
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0" >حركة الخزينة</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+         
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+
+
+
+<form action="{% url 'accounting:add_inbox' %}" method="post">
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="add_inbox">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">إضافة إيراد</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+                <!--end::Close-->
+            </div>
+          
+
+            <div class="modal-body">
+
+            
+            
+            <label for=""> المبلغ</label>
+            <input type="hidden" name="cashbox" value="{{cashbox.id}}" class="form-control" >
+            <input type="text" name="amont" class="form-control" >
+            <!-- <input type="text" name="cashbox_id" value="{{cashbox_id}}"  class="form-control" > -->
+
+            <label for="">تاريخ الايصال</label>
+             <div class="input-group" id="kt_td_picker_localization" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                <input type="text" class="form-control" data-td-target="#kt_td_picker_localization" name="date" />
+                <span class="input-group-text" data-td-target="#kt_td_picker_localization" data-td-toggle="datetimepicker">
+                    <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                </span>
+            </div>
+
+                
+                
+
+                <label for="">رقم الايصال</label>
+                <input type="text" name="no" class="form-control" >
+
+                <label for=""> البيان</label>
+                <input type="text" name="details" class="form-control" >
+
+                <label for="">التصنيف</label>
+              <select class="form-select form-select-sm form-select-solid"  data-placeholder="أختر التصنيف" name='category'>
+              
+                
+                {% for item in categories_in %}
+                     <option value="{{item.id}}">{{item}}</option>
+                {% endfor %}
+
+ 
+                    
+               
+            
+            </select>
+
+               
+
+              
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">تراجع</button>
+                <button type="submit" class="btn btn-primary">إضافة إيراد</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+<form action="{% url 'accounting:add_absentminded' %}" method="post">
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="add_absentminded">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">إضافة مصروف</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+                <!--end::Close-->
+            </div>
+          
+
+            <div class="modal-body">
+
+            
+            
+            <label for=""> المبلغ</label>
+            
+            <input type="text" name="amont" class="form-control" >
+            <input type="hidden" id="cashbox_balance" value="{{ balance }}">
+
+            <input type="hidden" name="cashbox" value="{{cashbox.id}}" class="form-control" >
+            
+
+            <label for="">تاريخ الايصال</label>
+             <div class="input-group" id="kt_td_picker_localization1" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                <input type="text" class="form-control" data-td-target="#kt_td_picker_localization1" name="date" />
+                <span class="input-group-text" data-td-target="#kt_td_picker_localization1" data-td-toggle="datetimepicker">
+                    <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                </span>
+            </div>
+
+                
+                
+
+                <label for="">رقم الايصال</label>
+                <input type="text" name="no" class="form-control" >
+
+                <label for=""> البيان</label>
+                <input type="text" name="details" class="form-control" >
+
+                <label for="">التصنيف</label>
+              <select class="form-select form-select-sm form-select-solid"  data-placeholder="أختر التصنيف" name='category'>
+              
+                
+                {% for item in categories_out %}
+                     <option value="{{item.id}}">{{item}}</option>
+                {% endfor %}
+
+ 
+                    
+               
+            
+            </select>
+
+               
+
+              
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">تراجع</button>
+                <button type="submit" class="btn btn-primary">إضافة مصروف</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+    
+    <!-- 📌 صندوق الأزرار + الملخص -->
+    <div class="card p-4 mb-5 shadow-sm">
+
+        <div class=" mb-4">
+
+            <!-- 🔵 زر إضافة إيراد -->
+            <button href="#" class="btn btn-success fw-bold px-4 py-2 mb-2" data-bs-toggle="modal" data-bs-target="#add_inbox" >
+                إضافة إيراد
+            </button>
+
+            <!-- 🔴 زر إضافة مصروف -->
+            <a href="#" class="btn btn-danger fw-bold px-4 py-2 mb-2" data-bs-toggle="modal" data-bs-target="#add_absentminded">
+                إضافة مصروف
+            </a>
+
+            <!-- 🟦 زر التقارير -->
+            <a href="#" class="btn btn-primary fw-bold px-4 py-2 mb-2">
+                التقارير
+            </a>
+
+        </div>
+
+        <!-- 🟨 البوكسات الثلاثة -->
+        <div class="row text-center">
+
+            <!-- 🟩 رصيد الخزينة -->
+            <div class="col-md-4 mb-3">
+                <div class="p-3 rounded text-white fw-bold" style="background:#007bff;">
+                    رصيد الخزينة:
+                    <span class="fs-4">{{ balance|default:"0" }}</span>
+                </div>
+            </div>
+
+            <!-- 🟦 إجمالي الإيرادات -->
+            <div class="col-md-4 mb-3">
+                <div class="p-3 rounded text-white fw-bold" style="background:#28a745;">
+                    إجمالي الإيرادات:
+                    <span class="fs-4">{{ total_income|default:"0" }}</span>
+                </div>
+            </div>
+
+            <!-- 🟥 إجمالي المصروفات -->
+            <div class="col-md-4 mb-3">
+                <div class="p-3 rounded text-white fw-bold" style="background:#dc3545;">
+                    إجمالي المصروفات:
+                    <span class="fs-4">{{ total_expenses|default:"0" }}</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- جدول عرض الحركة -->
+    <table id="kt_datatable_dom_positioning" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+        <thead>
+            <tr class="fw-bold fs-6 text-gray-800 px-7">
+                <th>التسلسل</th>
+                <th>الخزينة</th>
+                <th>تاريخ الايصال</th>
+                <th>رقم الايصال</th>
+                <th>البيان</th>
+                <th>التصنيف</th>
+                <th>البند</th>
+                <th>الوارد</th>
+                <th>المنصرف</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in transactions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <td>{{ item.cashbox }}</td>
+
+                <td>{{ item.date_transaction|date:'d-M-Y' }}</td>
+
+                <td>{{ item.no }}</td>
+
+                <td>
+                    {% if item.details %}
+                        {{ item.details }}
+                    {% else %}
+                        <span class="badge bg-danger">لا يوجد بنود</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ item.category }}</td>
+
+                <td>
+                    {% if item.inbox %}
+                        <span class="badge bg-success">وارد</span>
+                    {% else %}
+                        <span class="badge bg-danger">منصرف</span>
+                    {% endif %}
+                </td>
+
+                {% if item.inbox %}
+                    <td>{{ item.inbox }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+
+                {% if item.absentminded %}
+                    <td>{{ item.absentminded }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<!--end::Toolbar-->
+    
+{% endblock body %}
+
+
+{% block js %}
+    <script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+   
+    
+    <script>
+        $("#kt_datatable_dom_positioning").DataTable({
+            "language": {"lengthMenu": "Show _MENU_"},
+            "dom":
+                "<'row mb-2'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start dt-toolbar'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+        });
+    </script>
+    <script>
+new tempusDominus.TempusDominus(document.getElementById("kt_td_picker_localization"), {
+    localization: {
+       
+        startOfTheWeek: 1,
+        format: "yyyy-MM-dd"
+    }
+});
+    </script>
+
+      <script>
+new tempusDominus.TempusDominus(document.getElementById("kt_td_picker_localization1"), {
+    localization: {
+       
+        startOfTheWeek: 1,
+        format: "yyyy-MM-dd"
+    }
+});
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // استخدم selector خاص بالمودال
+    const modal = document.getElementById("add_absentminded");
+
+    modal.addEventListener("shown.bs.modal", function () {
+        const amountInput = modal.querySelector("input[name='amont']");
+        const balance = parseFloat(modal.querySelector("#cashbox_balance").value);
+
+        // إضافة مكان الرسالة إذا لم يكن موجود
+        let messageBox = modal.querySelector(".amount-message");
+        if (!messageBox) {
+            messageBox = document.createElement("div");
+            messageBox.className = "amount-message";
+            messageBox.style.color = "red";
+            messageBox.style.fontWeight = "bold";
+            amountInput.after(messageBox);
+        }
+
+        amountInput.addEventListener("input", function () {
+            const amount = parseFloat(amountInput.value) || 0;
+            if (amount > balance) {
+                messageBox.textContent = "❌ لا يمكن صرف مبلغ أكبر من رصيد الخزينة: " + balance;
+            } else {
+                messageBox.textContent = "";
+            }
+        });
+    });
+});
+</script>
+
+
+
+
+ 
+{% endblock js %}
+    
+    
+    

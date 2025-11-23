@@ -31,7 +31,7 @@
             <!--begin::Actions-->
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <!--begin::Secondary button-->
-                <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">إضافة خزينة</a>
+                <a href="{% url 'accounting:add_cashbox' %}" class="btn btn-sm fw-bold btn-secondary">إضافة خزينة</a>
                 <!--end::Secondary button-->
                 
             </div>
@@ -60,7 +60,7 @@
                 <div class="modal-body">
                     <p class="text-success">هل تريد تنشيط  هذه الخزينه ؟؟؟</p>
                     <input type="text" class="form-control" name="name" id="name">
-                    <input type="text" name="id" id="id">
+                    <input type="hidden" name="id" id="id">
                 </div>
 
                 <div class="modal-footer">
@@ -175,7 +175,7 @@
                                                 <!--end::Menu item-->
                                                     <!--begin::Menu item-->
                                                 <div class="menu-item  px-3">
-                                                    <a href="#" class="menu-link px-3">التفاصيل</a>
+                                                    <a href="{% url 'accounting:transaction' item.id %}" class="menu-link px-3">الحركة</a>
                                                 </div>
                                                 <!--end::Menu item-->
                                             

@@ -25,7 +25,7 @@ class CashBox(models.Model):        # الخزينة
 # انش اء حركة الخزينة  من وراد ومنصرف للخزينة دى
 class CashTransaction(models.Model):        # حركة الخزينة
     cashbox=models.ForeignKey(CashBox,related_name='transaction_cashbox',on_delete=models.CASCADE)        # أسم الخزينة
-    date_transaction=models.DateTimeField()           # تاريخ الحركة
+    date_transaction=models.DateField()           # تاريخ الحركة
     no=models.IntegerField()                          # رقم الايصال
     category=models.ForeignKey('Category',related_name='transaction_category',on_delete=models.SET_NULL,null=True,blank=True)
     inbox=models.FloatField(null=True,blank=True)       # الوارد

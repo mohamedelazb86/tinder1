@@ -138,3 +138,34 @@ def all_transaction(request):
 
     return render(request, 'accounting/all_transaction.html', context)
 
+@login_required
+def search(request):
+
+    cashboxs = CashBox.objects.filter(treasurer=request.user)
+
+    selected_id = request.GET.get('cashbox')
+
+    # الخط الأساسي: فلترة على الخزينة
+    if selected_id:
+        transactions = CashTransaction.objects.filter(cashbox_id=selected_id)
+    else:
+        transactions = CashTransaction.objects.filter(cashbox__in=cashboxs)
+
+    # فلترة التاريخ
+    date1 = request.GET.get('date1')
+    date2 = request.GET.get('date2')
+
+    if date1 and date2:
+        # نتأكد أن التاريخ صحيح
+        if date1 <= date2:
+            transactions = transactions.filter(date_transaction__range=[date1, date2])
+
+    context = {
+        'transactions': transactions,
+        'cashboxs': cashboxs,
+        'selected_id': selected_id,
+    }
+
+    return render(request, 'accounting/all_transaction.html', context)
+
+

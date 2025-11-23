@@ -1,15 +1,20 @@
 from django.urls import path
-from . import views
+from . import view1
+from . import view
 
 app_name='accounting'
 
 urlpatterns = [
-    path('',views.all_cashbox,name='all_cashbox'),
-    path('add_cashbox',views.add_cashbox,name='add_cashbox'),
-    path('edit_cashbox/<int:id>',views.edit_cashbox,name='edit_cashbox'),
+    path('',view.all_cashbox,name='all_cashbox'),
+    path('add_cashbox',view.add_cashbox,name='add_cashbox'),
+    path('edit_cashbox/<int:id>',view1.edit_cashbox,name='edit_cashbox'),
 
-    path('active',views.active_cashbox,name='active'),
-    path('deactive',views.deactive,name='deactive'),
+    path('active',view.active_cashbox,name='active'),
+    path('deactive',view.deactive,name='deactive'),
 
-    path('all_transaction',views.all_transaction,name='all_transaction'),
+    path('mytrannsaction/<int:id>',view.transaction,name='transaction'),
+    path('add_inbox',view.add_inbox,name='add_inbox'),
+    path('add_absentminded',view.add_absentminded,name='add_absentminded'),
+
+   
 ]
