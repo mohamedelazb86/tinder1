@@ -58,15 +58,15 @@ def edit_tinder(request,id):
         tinder.created_by=request.user
 
         if close_date > open_date:
-            tinder.open_date=open_date
-            tinder.close_date=close_date
+            tinder.open_date = open_date
+            tinder.close_date = close_date
 
-        tinder.insurance_amount=insurance_amount
-        tinder.insurance_type=insurance_type
-        tinder.offer_value=offer_value
-        tinder.company_by_id=company_by_id or None
+        tinder.insurance_amount = insurance_amount
+        tinder.insurance_type = insurance_type
+        tinder.offer_value = offer_value
+        tinder.company_by_id = company_by_id or None
         if awared_by_id:
-            tinder.awared_by_id=awared_by_id or None
+            tinder.awared_by_id = awared_by_id or None
 
         tinder.status=status
         
@@ -75,59 +75,72 @@ def edit_tinder(request,id):
 
         
         # ⚡ نلف على كل العناصر اللي فيها file_title
+         # ⚡ نلف على كل العناصر اللي فيها file_title
         i = 0
         while True:
-            title_key = f'file_list[{i}][file_title]'
-            file_key = f'file_list[{i}][file_upload]'
-            if title_key in request.POST and file_key in request.FILES:
-                file_title = request.POST.get(title_key)
-                file_obj = request.FILES.get(file_key)
+            title_key = f'files_list[{i}][file_title]'
+            file_key = f'files_list[{i}][file_upload]'
 
-                # تحقق أنه ملف PDF
-                if file_obj.name.lower().endswith('.pdf'):
-                    TinderFiles.objects.create(
-                        tinder=tinder,
-                        title=file_title,
-                        files=file_obj
-                    )
-                else:
-                    messages.warning(request, f"❌ الملف '{file_obj.name}' ليس PDF وتم تجاهله")
-
-                i += 1
-            else:
-                break  # لما يخلص الملفات نخرج من اللوب
-          
-        ii = 0
-        while True:
-            item_key = f'items_list[{ii}][item]'
-            quantity_key = f'items_list[{ii}][quantity]'
-            suplyprice_key = f'items_list[{ii}][supply_price]'
-            code_key = f'items_list[{ii}][code]'
-            tinderprice_key = f'items_list[{ii}][tinder_price]'
-            unit_key = f'items_list[{ii}][unit]'
-            if item_key in request.POST and suplyprice_key in request.POST  and  unit_key in request.POST and quantity_key in request.POST and  code_key in request.POST:
-                item_title = request.POST.get(item_key)
-                quantity_obj = request.POST.get(quantity_key)
-                suplyprice_obj = request.POST.get(suplyprice_key)
-                tinderprice_obj = request.POST.get(tinderprice_key)
-                unit_obj = request.POST.get(unit_key)
-                code_obj = request.POST.get(code_key)
-
-               
-                TindetItem.objects.create(
-                    tinder=tinder,
-                    item=item_title,
-                    quantity=quantity_obj,
-                    supply_price=suplyprice_obj,
-                    tinder_price=tinderprice_obj,
-                    unit=unit_obj,
-                    code=code_obj,
-                )
-            
-
-                ii += 1
-            else:
+            # توقف لو مفيش حتى عنوان (يعني مفيش عنصر)
+            if title_key not in request.POST:
                 break
+
+            file_title = request.POST.get(title_key)
+            file_obj = request.FILES.get(file_key)
+
+
+               # شرط PDF
+            if file_obj and not file_obj.name.lower().endswith('.pdf'):
+                messages.error(request, "❌ الملف يجب أن يكون PDF فقط.")
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+
+            # ⚡ احفظ فقط لو فيه عنوان + ملف
+            if file_title and file_obj:
+                TinderFiles.objects.create(
+                    tinder=tinder,
+                    title=file_title,
+                    files=file_obj
+                )
+
+            i += 1
+
+    ii = 0
+    while True:
+        item_key = f'items_list[{ii}][item]'
+        quantity_key = f'items_list[{ii}][quantity]'
+        suplyprice_key = f'items_list[{ii}][supply_price]'
+        tinderprice_key = f'items_list[{ii}][tinder_price]'
+        unit_key = f'items_list[{ii}][unit]'
+        code_key = f'items_list[{ii}][code]'
+        statment_key = f'items_list[{ii}][statment]'
+
+        # توقف لو مفيش البند (يعني مفيش عنصر)
+        if item_key not in request.POST:
+            break
+
+        item_title = request.POST.get(item_key)
+        quantity = request.POST.get(quantity_key)
+        supply_price = request.POST.get(suplyprice_key) or None
+        tinder_price = request.POST.get(tinderprice_key) or None
+       
+        tinder_unint = request.POST.get(unit_key) 
+        tinder_code = request.POST.get(code_key)
+        tinder_statment = request.POST.get(statment_key)
+
+        # ⚡ احفظ فقط لو البند مكتوب
+        if item_title:
+            TindetItem.objects.create(
+                tinder=tinder,
+                item=item_title,
+                quantity=quantity,
+                supply_price=supply_price,
+                tinder_price=tinder_price,
+                unit=tinder_unint,
+                code=tinder_code,
+                statment=tinder_statment
+            )
+
+        ii += 1
         
         
         messages.success(request,'تم الحفظ بنجاح')
@@ -146,16 +159,19 @@ def edit_tinder(request,id):
         
     }
     return render(request,'tinder/edit_tinder.html',context)
+from myproject.models import Project
 @login_required
 def detail_tinder(request,id):
     tinder=Tinder.objects.get(id=id)
     items=TindetItem.objects.filter(tinder=tinder)
     files=TinderFiles.objects.filter(tinder=tinder)
+    project1=Project.objects.filter(tinder=tinder).first()
 
     context={
         'tinder':tinder,
         'items':items,
-        'files':files
+        'files':files,
+        'project1':project1
     }
     return render(request,'tinder/detail_tinder.html',context)
 
@@ -221,53 +237,67 @@ def save_tinder(request):
         while True:
             title_key = f'files_list[{i}][file_title]'
             file_key = f'files_list[{i}][file_upload]'
-            if title_key in request.POST and file_key in request.FILES:
-                file_title = request.POST.get(title_key)
-                file_obj = request.FILES.get(file_key)
 
-                # تحقق أنه ملف PDF
-                if file_obj.name.lower().endswith('.pdf'):
-                    TinderFiles.objects.create(
-                        tinder=tinder,
-                        title=file_title,
-                        files=file_obj
-                    )
-                else:
-                    messages.warning(request, f"❌ الملف '{file_obj.name}' ليس PDF وتم تجاهله")
+            # توقف لو مفيش حتى عنوان (يعني مفيش عنصر)
+            if title_key not in request.POST:
+                break
 
-                i += 1
-            else:
-                break  # لما يخلص الملفات نخرج من اللوب
-       
-        ii = 0
-        while True:
-            item_key = f'items_list[{ii}][item]'
-            quantity_key = f'items_list[{ii}][quantity]'
-            suplyprice_key = f'items_list[{ii}][supply_price]'
-            tinderprice_key = f'items_list[{ii}][tinder_price]'
-            unit_key = f'items_list[{ii}][unit]'
-            if item_key in request.POST and suplyprice_key in request.POST and  tinderprice_key in request.POST and  unit_key in request.POST and quantity_key in request.POST:
-                item_title = request.POST.get(item_key)
-                quantity_obj = request.POST.get(quantity_key)
-                suplyprice_obj = request.POST.get(suplyprice_key)
-                tinderprice_obj = request.POST.get(tinderprice_key)
-                unit_obj = request.POST.get(unit_key)
+            file_title = request.POST.get(title_key)
+            file_obj = request.FILES.get(file_key)
 
-                # تحقق أنه ملف PDF
-                
-                TindetItem.objects.create(
+
+               # شرط PDF
+            if file_obj and not file_obj.name.lower().endswith('.pdf'):
+                messages.error(request, "❌ الملف يجب أن يكون PDF فقط.")
+                return redirect(request.META.get('HTTP_REFERER', '/'))
+
+            # ⚡ احفظ فقط لو فيه عنوان + ملف
+            if file_title and file_obj:
+                TinderFiles.objects.create(
                     tinder=tinder,
-                    item=item_title,
-                    quantity=quantity_obj,
-                    supply_price=suplyprice_obj,
-                    tinder_price=tinderprice_obj,
-                    unit=unit_obj
+                    title=file_title,
+                    files=file_obj
                 )
-            
 
-                ii += 1
-            else:
-                break  # 
+            i += 1
+
+    ii = 0
+    while True:
+        item_key = f'items_list[{ii}][item]'
+        quantity_key = f'items_list[{ii}][quantity]'
+        suplyprice_key = f'items_list[{ii}][supply_price]'
+        tinderprice_key = f'items_list[{ii}][tinder_price]'
+        unit_key = f'items_list[{ii}][unit]'
+        code_key = f'items_list[{ii}][code]'
+        statment_key = f'items_list[{ii}][statment]'
+
+        # توقف لو مفيش البند (يعني مفيش عنصر)
+        if item_key not in request.POST:
+            break
+
+        item_title = request.POST.get(item_key)
+        quantity = request.POST.get(quantity_key)
+        supply_price = request.POST.get(suplyprice_key) or None
+        tinder_price = request.POST.get(tinderprice_key) or None
+        unit = request.POST.get(unit_key)
+        code = request.POST.get(code_key)
+        statment = request.POST.get(statment_key)
+
+        # ⚡ احفظ فقط لو البند مكتوب
+        if item_title:
+            TindetItem.objects.create(
+                tinder=tinder,
+                item=item_title,
+                quantity=quantity,
+                supply_price=supply_price,
+                tinder_price=tinder_price,
+                unit=unit,
+                code=code,
+                statment=statment
+            )
+
+        ii += 1
+
         messages.success(request, '✅ تم حفظ المناقصة وجميع الملفات بنجاح')
         return redirect('tinder:all_tinder')
 
@@ -309,6 +339,7 @@ def edit_item(request):
     supply_price=request.POST.get('supply_price')
     tinder_price=request.POST.get('tinder_price')
     unit=request.POST.get('unit')
+    statment=request.POST.get('statment')
 
     item_tinder.item=item
     item_tinder.quantity=quantity
@@ -316,6 +347,7 @@ def edit_item(request):
     item_tinder.supply_price=supply_price
     item_tinder.tinder_price=tinder_price
     item_tinder.unit=unit
+    item_tinder.statement=statment
 
     item_tinder.save()
     messages.success(request,'مبرووك تم التعديل بنجاح')

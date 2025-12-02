@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} إضافة منتج جديد {% endblock title %}
+
+{% block body %}
+
+
+
+<div class="app-container container-xxl mt-10">
+
+    <!--begin::Card-->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h3 class="card-title fw-bold">➕ إضافة منتج جديد</h3>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" action="{% url 'inventory:save_product' %}" class="form p-10">
+            {% csrf_token %}
+
+            <div class="row g-8">
+
+                <!-- اسم المنتج -->
+                <div class="col-md-6">
+                    <label class="form-label fs-6 fw-semibold">اسم المنتج</label>
+                    <input type="text" name="name" id="nameInput"class="form-control form-control-lg" required>
+                </div>
+
+                  <div class="col-md-3">
+                    <label class="form-label fs-6 fw-semibold"> الرمز</label>
+                    <input type="text" name="sku" id="nameInput"class="form-control form-control-lg" required>
+                </div>
+
+             
+                <!-- العلامة التجارية -->
+                <div class="col-md-3">
+                    <label class="form-label fs-6 fw-semibold">العلامة التجارية</label>
+                    <select name="brand" class="form-select form-select-lg" required>
+                        <option value="">— اختر العلامة —</option>
+                        {% for b in brands %}
+                        <option value="{{ b.id }}">{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- الصنف الأساسي -->
+                <div class="col-md-6">
+                    <label class="form-label fs-6 fw-semibold">الصنف الأساسي</label>
+                    <select name="mainitem" class="form-select form-select-lg" required>
+                        <option value="">— اختر الصنف —</option>
+                        {% for m in mainitems %}
+                        <option value="{{ m.id }}">{{ m.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- المورد -->
+                <div class="col-md-6">
+                    <label class="form-label fs-6 fw-semibold">المورد</label>
+                    <select name="supplier" class="form-select form-select-lg">
+                        <option value="">— اختر المورد —</option>
+                        {% for s in suppliers %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+           
+
+                <!-- وصف -->
+                <div class="col-md-12">
+                    <label class="form-label fs-6 fw-semibold">وصف المنتج</label>
+                    <textarea name="descriptions" rows="4"
+                              class="form-control form-control-lg"
+                              placeholder="اكتب وصف المنتج، المواصفات، الحالة..."></textarea>
+                </div>
+
+                <!-- صورة -->
+                <div class="col-md-6">
+                    <label class="form-label fs-6 fw-semibold">صورة المنتج</label>
+                    <input type="file" id="imageInput" name="image"
+                           class="form-control form-control-lg">
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                    <img id="imgPreview"
+                         src="{% static 'images/placeholder-product.png' %}"
+                         class="rounded border"
+                         style="width: 120px; height:120px; object-fit: cover;">
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between mt-10">
+                <a href="/inventory/products" class="btn btn-light btn-lg px-10" style="background-color: rgb(231, 13, 13);">إلغاء</a>
+                <button type="submit" class="btn btn-primary btn-lg px-10">💾 حفظ المنتج</button>
+            </div>
+
+        </form>
+    </div>
+    <!--end::Card-->
+
+</div>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+    // Preview image
+    const imageInput = document.getElementById('imageInput');
+    const imgPreview = document.getElementById('imgPreview');
+
+    imageInput?.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => imgPreview.src = ev.target.result;
+        reader.readAsDataURL(file);
+    });
+
+    // Slug generator
+    function slugify(text) {
+        return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\u0621-\u064A-]+/g, '');
+    }
+
+    const nameInput = document.getElementById('nameInput');
+    const slugInput = document.getElementById('slugInput');
+    const btn = document.getElementById('genSlug');
+
+    nameInput.addEventListener('input', () => {
+        if (!slugInput.value) slugInput.value = slugify(nameInput.value);
+    });
+
+    btn.addEventListener('click', () => {
+        slugInput.value = slugify(nameInput.value);
+    });
+</script>
+{% endblock js %}

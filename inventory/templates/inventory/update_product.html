@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  تعديل المنتج
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Multipurpose</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+          
+          
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+<form action="{% url 'inventory:update_product' product.id %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-danger">تعديل منتج </h3>
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <div class="modal-body">
+                       
+                      
+                    <div class="row g-8">
+
+                        <!-- اسم المنتج -->
+                        <div class="col-md-4">
+                            <label class="form-label fs-6 fw-semibold">اسم المنتج</label>
+                            <input type="text" name="name" value="{{product.name}}" id="name"class="form-control form-control-lg" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label fs-6 fw-semibold"> الرمز</label>
+                            <input type="text" value="{{product.sku}}" name="sku" id="sku"class="form-control form-control-lg" required>
+                        </div>
+
+                    
+                        <!-- العلامة التجارية -->
+                        <div class="col-md-5">
+                            <label class="form-label fs-6 fw-semibold">العلامة التجارية</label>
+                            <select name="brand" id="brand" class="form-select form-select-lg" required>
+                                <option value="">— اختر العلامة —</option>
+                                {% for b in brands %}
+                                <option value="{{ b.id }}" {% if product.brand_id == b.id %}selected{% endif %}> {{ b.name }}</option>
+                                {% endfor %}
+
+                            
+
+                            </select>
+                        </div>
+
+                        <!-- الصنف الأساسي -->
+                        <div class="col-md-6">
+                            <label class="form-label fs-6 fw-semibold">الصنف الأساسي</label>
+                            <select name="mainitem" id="mainitem" class="form-select form-select-lg" required>
+                                <option value="">— اختر الصنف —</option>
+                                {% for m in mainitems %}
+                                <option value="{{ m.id }}" {% if product.mainitem_id  == m.id %}selected{% endif %}>{{ m.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- المورد -->
+                        <div class="col-md-6">
+                            <label class="form-label fs-6 fw-semibold">المورد</label>
+                            <select name="supplier" id="supplier" class="form-select form-select-lg">
+                                <option value="">— اختر المورد —</option>
+                                {% for s in suppliers %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                
+
+                        <!-- وصف -->
+                        <div class="col-md-12">
+                            <label class="form-label fs-6 fw-semibold">وصف المنتج</label>
+                            <textarea name="descriptions" id="descriptions" rows="4"
+                                    class="form-control form-control-lg"
+                                    >{{product.descriptions}}</textarea>
+                        </div>
+
+                        
+                <!-- صورة -->
+                <div class="col-md-6">
+                    <label class="form-label fs-6 fw-semibold">صورة المنتج</label>
+                    <input type="file" id="imageInput" name="image"
+                           class="form-control form-control-lg">
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                   <img id="imgPreview"
+                    src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'images/placeholder-product.png' %}{% endif %}"
+                    class="rounded border"
+                    style="width: 120px; height:120px; object-fit: cover;">
+
+                </div>
+
+                    </div>
+                        
+                </div>
+
+            <div class="d-flex justify-content-between mt-10">
+                <a href="/inventory/products" class="btn btn-light btn-lg px-10" style="background-color: rgb(231, 13, 13);">إلغاء</a>
+                <button type="submit" class="btn btn-primary btn-lg px-10">💾 حفظ المنتج</button>
+            </div>
+                
+          
+   
+</form>
+    
+{% endblock body %}
+
+
+{% block js %}
+<script>
+    // Preview image
+    const imageInput = document.getElementById('imageInput');
+    const imgPreview = document.getElementById('imgPreview');
+
+    imageInput?.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => imgPreview.src = ev.target.result;
+        reader.readAsDataURL(file);
+    });
+
+    // Slug generator
+    function slugify(text) {
+        return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\u0621-\u064A-]+/g, '');
+    }
+
+    const nameInput = document.getElementById('nameInput');
+    const slugInput = document.getElementById('slugInput');
+    const btn = document.getElementById('genSlug');
+
+    nameInput.addEventListener('input', () => {
+        if (!slugInput.value) slugInput.value = slugify(nameInput.value);
+    });
+
+    btn.addEventListener('click', () => {
+        slugInput.value = slugify(nameInput.value);
+    });
+</script>
+<script>
+document.getElementById("imageInput").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById("imgPreview");
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+    }
+});
+</script>
+
+{% endblock js %}
+    
+    
+    
+    
+

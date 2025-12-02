@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.humanize',
+
 
     #my package
 
@@ -57,6 +59,9 @@ INSTALLED_APPS = [
 
     'accounting',
     'inventory',
+    'myproject',
+
+   
 
 ]
 

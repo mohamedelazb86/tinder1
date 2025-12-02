@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    انشاء مشروع
+{% endblock title %}
+    
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<style>
+    body { background: #f8f9fa; }
+    .card { border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    label { font-weight: 600; }
+    .form-control, .form-select {
+        border-radius: 12px;
+        padding: 10px 12px;
+    }
+    .add-row-btn {
+        background: #0d6efd;
+        color: white;
+        border-radius: 10px;
+        padding: 6px 14px;
+    }
+    .delete-row-btn {
+        background: #dc3545;
+        color: white;
+        border-radius: 10px;
+        padding: 6px 14px;
+    }
+</style>
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Multipurpose</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <!--begin::Secondary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Rollover</a>
+                <!--end::Secondary button-->
+                <!--begin::Primary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Add Target</a>
+                <!--end::Primary button-->
+            </div>
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+
+<!-- MODAL item  edit -->
+ <form action="{% url 'myproject:edit_item' %}" method="post"  >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="update_item">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">تعديل البنود</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p>هل تريد تعديل هذا البند ؟؟؟</p>
+                    <input type="hidden" name="id" id="id">
+                    <label for="">البيان</label>
+                    <input type="text" class="form-control" name="statment" id="statment">
+                    <label for="">البند</label>
+                    <input type="text" class="form-control" name="item" id="item">
+                    <label for="">الكمية</label>
+                    <input type="text" class="form-control" name="quantity" id="quantity">
+                    <label for="">الكود</label>
+                    <input type="text" class="form-control" name="code" id="code">
+                    <label for="">سعر </label>
+                    <input type="text" class="form-control" name="supply_price" id="supply_price">
+                   
+                    <label for="">الوحدة</label>
+                    <input type="text" class="form-control" name="unit" id="unit">
+                   
+                   
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">تراجع</button>
+                    <button type="submit" class="btn btn-primary">تعديل البند </button>
+                </div>
+            </div>
+        </div>
+    </div>
+ </form>
+<!-- END MODEL item  edit-->
+
+<!-- MODAL FILE  delete -->
+ <form action="{% url 'tinder:delete_item' %}" method="post"  >
+    {% csrf_token %}
+    <div class="modal fade" tabindex="-1" id="delete_item">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">حذف البند</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-danger">هل تريد حذف هذا البند ؟؟؟</p>
+                    <input type="text" name="title" id="title">
+                   
+                    <input type="hidden" name="id" id="id">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">حذف البند </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- END MODEL FILE  delete-->
+
+<div class="container py-4">
+    
+    <div class="card p-4">
+        <h3 class="mb-3 text-primary">📌 إنشاء مشروع جديد</h3>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>عنوان المشروع</label>
+                    <input name="title" class="form-control" value="{{tinder.title}}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>الكود</label>
+                    <input name="code" class="form-control" value="{{tinder.code}}" >
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>الحالة</label>
+                    <select name="status" class="form-select">
+                        {% for k,v in STATUS_PROJECT %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>بداية المشروع</label>
+                    <input type="date" name="begin_project" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                 <div class="col-md-6">
+                    <label>مدة المشروع (بالأيام)</label>
+                    <input type="number" name="duration" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label> تاريخ الانشاء</label>
+                    <input type="date" name="date" class="form-control">
+                </div>
+            </div>
+
+           
+
+            <div class="mb-3">
+                <label>وصف المشروع</label>
+                <textarea name="desciptions" rows="4" class="form-control">{{tinder.descriptions}}</textarea>
+            </div>
+
+            <!-- ----------------------------
+                 Project Items
+            -------------------------------->
+            <h4 class="mt-4 text-success">📌 بنود المشروع</h4>
+             <table class="" id="itemsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>البيان</th>
+                        <th>البند</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>الوحدة</th>
+                        <th>الإجمالى</th>
+                        <th>Action</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {% for item in items %}
+                    <tr>
+                        <td>{{item.statment}}</td>
+                        <td>{{item.item}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.supply_price}}</td>
+                        <td>{{item.unit}}</td>
+                        <td>{{item.total}}</td>
+                        		 <td style="width: 20%;" >
+
+                                    <a href="#" class="btn btn-primary" data-bs-target="#update_item" data-bs-toggle="modal"
+                                        data-id="{{item.id}}"
+                                        data-item="{{item.item}}"
+                                        data-quantity="{{item.quantity}}"
+                                        data-price="{{item.supply_price}}"
+                                        data-code="{{item.code}}"
+                                        
+                                        data-statment="{{item.statment}}"
+                                        data-unit="{{item.unit}}"  >تعديل</a>
+                                        
+
+                                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_item"
+                                        data-id="{{item.id}}"
+                                        data-item="{{item.item}}">حذف</a> </td>
+                    
+                        
+                    </tr> 
+                {% endfor %}
+                    
+                   
+                </tbody>
+            </table>
+
+
+            
+
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-5">💾 حفظ المشروع</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+    
+{% endblock body %}
+
+
+{% block js %}
+   
+
+<script>
+            $('#update_item').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var item = button.data('item')
+        var quantity = button.data('quantity')
+        var code = button.data('code')
+        var supply_price = button.data('supply_price')
+       
+        var unit = button.data('unit')
+        var statment = button.data('statment')
+       
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #item').val(item);
+        modal.find('.modal-body #quantity').val(quantity);
+        modal.find('.modal-body #code').val(code);
+        modal.find('.modal-body #supply_price').val(supply_price);
+       
+        modal.find('.modal-body #unit').val(unit);
+        modal.find('.modal-body #statment').val(statment);
+        
+    
+    });
+     </script>
+
+    <script>
+            $('#delete_item').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var name = button.data('item')
+       
+
+        
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #title').val(name);
+        
+    
+    });
+    </script>
+{% endblock js %}
+    
+    
+    
+    

@@ -15,9 +15,9 @@ body{
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-  font-family: "Cairo", sans-serif;
-  font-size: 15px !important;
+  margin-top: 12px;
+  font-family: "myfont", sans-serif;
+  font-size: 13px !important;
   background-color: #fff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
@@ -40,7 +40,7 @@ thead th {
   text-align: center; /* تأكيد توسيط العناوين */
   vertical-align: middle;
   color:white  !important;
-  font-size: 15px; 
+  font-size: 13px; 
   
 }
 

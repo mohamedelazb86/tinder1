@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
+{% load humanize %}
 {% load static %}
+
 
 {% block title %}
     my transaction
@@ -209,7 +210,7 @@
             <div class="col-md-4 mb-3">
                 <div class="p-3 rounded text-white fw-bold" style="background:#007bff;">
                     رصيد الخزينة:
-                    <span class="fs-4">{{ balance|default:"0" }}</span>
+                    <span class="fs-4">{{ balance|default:"0"|intcomma }}</span>
                 </div>
             </div>
 
@@ -217,7 +218,7 @@
             <div class="col-md-4 mb-3">
                 <div class="p-3 rounded text-white fw-bold" style="background:#28a745;">
                     إجمالي الإيرادات:
-                    <span class="fs-4">{{ total_income|default:"0" }}</span>
+                    <span class="fs-4">{{ total_income|default:"0"|intcomma }}</span>
                 </div>
             </div>
 
@@ -225,7 +226,7 @@
             <div class="col-md-4 mb-3">
                 <div class="p-3 rounded text-white fw-bold" style="background:#dc3545;">
                     إجمالي المصروفات:
-                    <span class="fs-4">{{ total_expenses|default:"0" }}</span>
+                    <span class="fs-4">{{ total_expenses|default:"0"|intcomma }}</span>
                 </div>
             </div>
 
@@ -258,7 +259,7 @@
 
                 <td>{{ item.cashbox }}</td>
 
-                <td>{{ item.date_transaction|date:'d-M-Y' }}</td>
+                <td>{{ item.date_transaction|date:'Y-m-d' }}</td>
 
                 <td>{{ item.no }}</td>
 
@@ -274,20 +275,20 @@
 
                 <td>
                     {% if item.inbox %}
-                        <span class="badge bg-success">وارد</span>
+                        <span class="badge bg-success text-white">وارد</span>
                     {% else %}
-                        <span class="badge bg-danger">منصرف</span>
+                        <span class="badge bg-danger text-white">منصرف</span>
                     {% endif %}
                 </td>
 
                 {% if item.inbox %}
-                    <td>{{ item.inbox }}</td>
+                    <td>{{ item.inbox|intcomma }}</td>
                 {% else %}
                     <td>0</td>
                 {% endif %}
 
                 {% if item.absentminded %}
-                    <td>{{ item.absentminded }}</td>
+                    <td>{{ item.absentminded|intcomma }}</td>
                 {% else %}
                     <td>0</td>
                 {% endif %}

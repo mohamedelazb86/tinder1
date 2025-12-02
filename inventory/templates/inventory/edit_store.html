@@ -1,0 +1,121 @@
+  
+
+  {% extends 'base.html' %}
+
+{% block title %}
+    DashBoard
+{% endblock title %}
+    
+
+{% block css %}
+    
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Multipurpose</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <!--begin::Secondary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-secondary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Rollover</a>
+                <!--end::Secondary button-->
+                <!--begin::Primary button-->
+                <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Add Target</a>
+                <!--end::Primary button-->
+            </div>
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="card-header bg-primary text-white rounded-top-4 py-3">
+                            <h4 class="mb-0"><i class="fas fa-warehouse me-2"></i>تعديل مخزن </h4>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <form action="" method="POST">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">اسم المخزن</label>
+                                    <input type="text" name="name" value="{{store.name}}"
+                                        class="form-control form-control-lg rounded-3"
+                                        placeholder="اكتب اسم المخزن">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">الموقع</label>
+                                    <select name="location" class="form-select form-select-lg rounded-3">
+                                        <option value="">-- اختر الموقع --</option>
+                                        {% for item in locations %}
+                                            <option value="{{ item.id }}"{% if store.location_id == item.id %}selected{% endif %}>{{ item }}</option>
+                                            
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">المدير المسؤول</label>
+                                    <select name="manager" class="form-select form-select-lg rounded-3">
+                                        <option value="">-- اختر المدير --</option>
+                                        {% for user in users %}
+                                            <option value="{{ user.id }}"{% if store.manager_id == user.id %}selected{% endif %}>{{ user.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">ملاحظات</label>
+                                    <textarea name="notes" rows="4" 
+                                            class="form-control rounded-3"
+                                            placeholder="أدخل ملاحظات عن المخزن">{{store.notes}}</textarea>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button class="btn btn-primary btn-lg px-5 rounded-3" type="submit" >
+                                        <i class="fas fa-check-circle ms-2"></i>حفظ المخزن
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+    </div>
+</form>
+    
+{% endblock body %}
+
+
+{% block js %}
+    
+{% endblock js %}
+    
+    
+    
+    
+ 

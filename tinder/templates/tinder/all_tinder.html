@@ -95,11 +95,11 @@
                 <td>{{forloop.counter}}</td>
                 <td>{{object.code}}</td>
                 <td>{{object.title}}</td>
-                <td>{{object.open_date|date:'M,D,Y'}}</td>
-                <td>{{object.close_date|date:'M,D,Y'}}</td>
+                <td>{{object.open_date|date:"M d, Y"}}</td>
+                <td>{{object.close_date|date:"M d, Y"}}</td>
             
-                {% if object.awared  %}
-                   <td>{{object.awared}}</td> 
+                {% if object.status == 'AWARED'  %}
+                   <td>{{object.awared_by}}</td> 
                 {% else %}
                 <td>Not Company awared Now</td>
                 {% endif %}
@@ -108,8 +108,22 @@
                 <td>{{object.company_by}}</td>
                 <td>{{object.insurance_amount}}</td>
                 <td>{{object.insurance_type}}</td>
+
                 
-                <td>{{object.status}}</td>
+                {% if object.status == 'AWARED' %}
+                     <td class="text-success">{{object.status}}</td>
+                {% elif object.status == 'OPEN' %}
+
+                     <td class="text-danger">{{object.status}}</td>
+                {% else %}
+
+                    <td style="color: blue;">{{object.status}}</td>
+
+
+                {% endif %}
+                    
+                
+               
                     <td>
                         <div class="me-0">
                                         <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">

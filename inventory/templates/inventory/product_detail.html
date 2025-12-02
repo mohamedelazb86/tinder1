@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ product.name }} {% endblock %}
+
+{% block body %}
+<style>
+    .product-gallery img {
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .product-gallery img:hover {
+        transform: scale(1.05);
+    }
+    .thumb {
+        height: 80px;
+        width: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #eee;
+    }
+    .thumb.active {
+        border: 2px solid #007bff !important;
+    }
+    .main-img {
+        height: 450px;
+        width: 100%;
+        object-fit: contain;
+        background: #fafafa;
+        border-radius: 12px;
+        padding: 15px;
+    }
+    .spec-title {
+        font-weight: bold;
+        margin-top: 25px;
+        font-size: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 8px;
+    }
+</style>
+
+<div class="container py-5">
+
+    <div class="row">
+
+        <!-- LEFT COLUMN (Images) -->
+        <div class="col-lg-4">
+
+            <!-- Main Image -->
+        {% if product.image %}
+            <img id="mainImage" src="{{ product.image.url }}" class="main-img img-fluid shadow-sm mb-3">
+        {% else %}
+            <img id="mainImage" src="{% static 'assets/custom/45.jpg' %}" class="main-img img-fluid shadow-sm mb-3">
+        {% endif %}
+
+        </div>
+
+        <!-- MIDDLE COLUMN (Details) -->
+        <div class="col-lg-5">
+
+            <!-- Product Title -->
+            <h2 class="fw-bold mb-2">{{ product.name }}</h2>
+
+            <!-- Rating -->
+            <div class="text-warning mb-3">
+                ⭐⭐⭐⭐⭐ <span class="text-muted">(124 تقييم)</span>
+            </div>
+
+            <!-- Brand -->
+            <p class="text-muted mb-1">البراند:</p>
+            <h5 class="fw-semibold mb-3">{{ product.brand.name }}</h5>
+
+            <!-- Product Code / SKU -->
+            <div class="mb-4">
+                <p class="text-muted mb-1">كود المنتج:</p>
+                <span class="fw-semibold fs-5">{{ product.code }}</span>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-muted mb-1">SKU:</p>
+                <span class="fw-semibold fs-5">{{ product.sku }}</span>
+            </div>
+
+            <!-- Description -->
+            <div class="spec-title">الوصف</div>
+            <p class="mt-2 text-muted fs-6">{{ product.descriptions }}</p>
+
+        </div>
+
+        <!-- RIGHT COLUMN (Actions Amazon Style) -->
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm p-4 rounded-4 border-0">
+
+                <h4 class="fw-bold mb-3">التحكم</h4>
+
+                <a href="{% url 'inventory:product_detail' product.id %}"
+                   class="btn btn-warning w-100 mb-3 py-2">
+                    تعديل المنتج
+                </a>
+
+                <a href="{% url 'inventory:delete_product'  %}"
+                   class="btn btn-danger w-100 mb-3 py-2">
+                    حذف المنتج
+                </a>
+
+                <a href="#" onclick="window.print()"
+                   class="btn btn-dark w-100 py-2">
+                    طباعة
+                </a>
+
+                <hr>
+
+                <p class="text-muted small mb-1">العنصر الرئيسي:</p>
+                <p class="fw-semibold">{{ product.mainitem.name }}</p>
+
+                <p class="text-muted small mb-1">المورد:</p>
+                <p class="fw-semibold">{{ product.supplier.name }}</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SPECIFICATIONS TABLE -->
+    <div class="card shadow-sm mt-5 rounded-4 border-0 p-4">
+
+        <h4 class="fw-bold mb-3">المواصفات الفنية</h4>
+
+        <table class="table table-borderless">
+
+            <tr>
+                <th class="text-muted" width="25%">الكود الداخلي</th>
+                <td>{{ product.code_no }}</td>
+            </tr>
+
+            <tr>
+                <th class="text-muted">Slug</th>
+                <td>{{ product.slug }}</td>
+            </tr>
+
+            <tr>
+                <th class="text-muted">تاريخ الإضافة</th>
+                <td>{{ product.created_at|date:"d M Y" }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+    function changeImage(img) {
+        document.getElementById('mainImage').src = img.src;
+        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+        img.classList.add('active');
+    }
+</script>
+
+{% endblock %}

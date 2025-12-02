@@ -76,7 +76,7 @@ class TinderFiles(models.Model):
 
 
 
-    def save(self,*args,**kwargs):
+    def save(self,*args,**kwargs):   # فى حالة تعديل الملف ورفع ملف جديد يحذف الملف القديم من media
         if self.pk:
             try:
                 old_instance = TinderFiles.objects.get(pk=self.pk)
@@ -88,6 +88,16 @@ class TinderFiles(models.Model):
                 pass
 
         super().save(*args, **kwargs)
+
+    
+    
+    def delete(self, *args, **kwargs):
+        # Delete the file from the storage before deleting the model instance
+        if self.files and os.path.isfile(self.files.path):
+            os.remove(self.files.path)
+        super().delete(*args, **kwargs)
+
+
 
     def __str__(self):
         return self.title
@@ -101,12 +111,20 @@ class TindetItem(models.Model):
      code=models.CharField(max_length=25,null=True,blank=True)
      supply_price=models.FloatField(null=True,blank=True)
      tinder_price=models.FloatField(null=True,blank=True)
-     unit=models.CharField(max_length=25,default='pice')
+     unit=models.CharField(max_length=25,default='piece')
+     statment=models.TextField(max_length=120)
+     total=models.FloatField(default=0)
 
      def __str__(self):
           return self.item
      
      def save(self,*args,**kwargs):
-          if not self.code.startswith('it_'):
-               self.code='it_'+self.code
+          if self.code:
+            if not self.code.startswith('it_'):
+                self.code='IT_'+self.code
+
+          if self.quantity and self.supply_price:
+            if self.supply_price == 0:
+                self.supply_price = 1
+            self.total = self.quantity * self.supply_price
           super().save(*args,**kwargs)

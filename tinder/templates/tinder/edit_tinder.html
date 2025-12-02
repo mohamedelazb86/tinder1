@@ -208,13 +208,13 @@
                 <!-- تاريخ الفتح -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold">تاريخ الفتح</label>
-                    <input type="datetime-local" name="open_date" value="{{ tinder.open_date|date:'Y-m-d\\TH:i' }}" class="form-control">
+                    <input type="date" name="open_date" value="{{ tinder.open_date|date:'Y-m-d' }}" class="form-control">
                 </div>
 
                 <!-- تاريخ الإغلاق -->
                 <div class="col-md-6">
                     <label class="form-label fw-bold">تاريخ الإغلاق</label>
-                    <input type="datetime-local" name="close_date" value="{{ tinder.close_date|date:'Y-m-d\\TH:i' }}" class="form-control">
+                    <input type="date" name="close_date" value="{{ tinder.close_date|date:'Y-m-d' }}" class="form-control">
                 </div>
 
                 <!-- التأمين -->
@@ -605,14 +605,7 @@
     
     });
     </script>
-     <script>
-        $(document).ready(function(){
-          $('.reat_file').hide()
-        });
-        $('.show_file').click(function(){
-            $('.reat_file').show()
-        });
-     </script>
+    
 {% endblock js %}
     
     

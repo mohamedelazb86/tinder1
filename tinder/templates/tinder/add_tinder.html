@@ -7,7 +7,8 @@
     
 
 {% block css %}
-    
+
+
 {% endblock css %}
 
 
@@ -188,6 +189,10 @@
                                         <label class="form-label">البند</label>
                                         <input type="text" class="form-control mb-2 mb-md-0" name="item" />
                                     </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label">البيان</label>
+                                        <input type="text" class="form-control mb-2 mb-md-0" name="statment" />
+                                    </div>
                                     <div class="col-md">
                                         <label class="form-label">الكمية</label>
                                         <input type="text" class="form-control mb-2 mb-md-0" name="quantity" />
@@ -290,14 +295,9 @@
     }
 });
      </script>
-     <script>
-        $(document).ready(function(){
-          $('.reat_file').hide()
-        });
-        $('.show_file').click(function(){
-            $('.reat_file').show()
-        });
-     </script>
+
+
+    
 {% endblock js %}
     
     
