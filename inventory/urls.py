@@ -18,6 +18,27 @@ urlpatterns = [
     path('delete_store',views.delete_store,name='delete_store'),
     path('edit_store/<int:id>',views.edit_store,name='edit_store'),
     path('detail_store/<int:id>',views.store_detail,name='detail_store'),
+
+    #brand
+    path('brands',views.brands,name='brands'),
+    path('add_brand',views.add_brand,name='add_brand'),
+    path('delete_brand',views.delete_brand,name='delete_brand'),
+    path('edit_brand/<int:id>',views.edit_brand,name='edit_brand'),
+
+    #mainitem
+    path('mainitem',views.mainitem,name='mainitem'),
+    path('add_mainitem',views.add_mainitem,name='add_mainitem'),
+    path('delete_mainitem',views.delete_mainitem,name='delete_mainitem'),
+    path('edit_mainitem/<int:id>',views.edit_mainitem,name='edit_mainitem'),
+
+    # transaction
+    path('transaction',views.transaction,name='transactions'),
+    path('supply_permit',views.supply_permit,name='supply_permit'),
+    path('purchase',views.add_purchase,name='add_purchase'),
+    
+    path('trans_detail/<int:id>',views.trans_detail,name='trans_detail'),
+    path('save_transdetail',views.save_transdetail,name='save_transdetail'),
+    
     
 
 

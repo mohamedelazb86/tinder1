@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} إضافة صرف جديد {% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">إضافة صرف من المخزن</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">المخزن</label>
+                        <select name="store" class="form-select">
+                            {% for st in stores %}
+                                <option value="{{ st.id }}">{{ st.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">العميل</label>
+                        <select name="customer" class="form-select">
+                            {% for cs in customers %}
+                                <option value="{{ cs.id }}">{{ cs.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">التاريخ</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5 class="fw-bold">أصناف الصرف</h5>
+
+                <table class="table table-bordered text-center" id="itemsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>الصنف</th>
+                            <th>الكمية</th>
+                            <th>السعر</th>
+                            <th>إزالة</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+
+                <button type="button" class="btn btn-success" onclick="addRow()">إضافة صنف +</button>
+
+                <hr>
+
+                <button class="btn btn-danger px-5">تسجيل الصرف</button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+function addRow() {
+    let row = `
+        <tr>
+            <td>
+                <select name="product[]" class="form-select">
+                    {% for pr in products %}
+                        <option value="{{ pr.id }}">{{ pr.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+
+            <td><input type="number" step="0.1" name="qty[]" class="form-control"></td>
+            <td><input type="number" step="0.1" name="price[]" class="form-control"></td>
+
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">X</button>
+            </td>
+        </tr>
+    `;
+    document.querySelector("#itemsTable tbody").insertAdjacentHTML("beforeend", row);
+}
+</script>
+
+{% endblock %}

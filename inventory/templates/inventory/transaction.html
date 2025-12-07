@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    حركة المخزن
+{% endblock title %}
+    
+
+{% block css %}
+    <link href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock css %}
+
+
+
+{% block body %}
+<!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <!--begin::Title-->
+                <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">الحركات</h1>
+                <!--end::Title-->
+            
+            </div>
+            <!--end::Page title-->
+            <!--begin::Actions-->
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <!--begin::Secondary button-->
+                <a href="" class="btn btn-sm fw-bold btn-secondary" >اذن صرق</a>
+                <!--end::Secondary button-->
+                <!--begin::Primary button-->
+                <a href="" class="btn btn-sm fw-bold btn-primary" >أذن توريد</a>
+                <!--end::Primary button-->
+            </div>
+            <!--end::Actions-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+<!--end::Toolbar-->
+
+
+{% if transactions %}
+    <table id="kt_datatable_dom_positioning" class="table table-striped table-row-bordered gy-5 gs-7 border rounded">
+        <thead>
+            <tr class="fw-bold fs-6 text-gray-800 px-7">
+                <th>التسلسل</th>
+                <th>رقم الايصال</th>
+                <th>تاريخ الحركة</th>
+                <th> نوع الحركة</th>
+                <th>كود الحركة</th>
+                <th>المورد/ المقاول</th>
+             
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        {% for object in transactions %}
+               <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{object.reset_no}}</td>
+                <td>{{object.date}}</td>
+                <td>{{object.type}}</td>
+                <td>{{object.code}}</td>
+                
+                {% if object.supplier %}
+                    <td>{{object.supplier}}</td>
+                {% endif %}
+                
+                {% if object.customer %}
+                    <td>{{object.customer}}</td>
+                {% endif %}
+              
+                   <td>
+                    <a href="{% url 'inventory:edit_brand' object.id %}" class="btn btn-primary"  >تعديل</a>
+            
+                    
+                    <a href="#" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#delete_brand"
+                    data-id="{{object.id}}"
+                    data-name="{{object.name}}"
+                    >حذف</a>
+                </td>
+            </tr>
+        {% endfor %}
+            
+         
+         
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-danger">معذره لا توجد اى حركات حتى الان</p>
+ 
+    
+{% endif %}
+    
+
+
+    
+{% endblock body %}
+
+
+{% block js %}
+        <script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+        <script>
+            $("#kt_datatable_dom_positioning").DataTable({
+	"language": {
+		"lengthMenu": "Show _MENU_",
+	},
+	"dom":
+		"<'row mb-2'" +
+		"<'col-sm-6 d-flex align-items-center justify-conten-start dt-toolbar'l>" +
+		"<'col-sm-6 d-flex align-items-center justify-content-end dt-toolbar'f>" +
+		">" +
+
+		"<'table-responsive'tr>" +
+
+		"<'row'" +
+		"<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+		"<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+		">"
+});
+        </script>
+       
+
+{% endblock js %}
+    
+    
+    
+    

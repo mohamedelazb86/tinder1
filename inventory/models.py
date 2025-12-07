@@ -152,19 +152,40 @@ TYPE_TRANSACTION=[
 
 ]
 
+
+
 class Transaction(models.Model):
     store=models.ForeignKey(Store,related_name='transaction_store',on_delete=models.CASCADE)
-    product=models.ForeignKey(Product,related_name='transaction_product',on_delete=models.SET_NULL,null=True,blank=True)
-    supplier=models.ForeignKey(Supplier,related_name='transactions_supplier',on_delete=models.SET_NULL,null=True,blank=True)
-    customer=models.ForeignKey(Customer,related_name='transactions_customer',on_delete=models.SET_NULL,null=True,blank=True)
-    quantity=models.FloatField(default=0)
-    price=models.FloatField(default=0)
+    reset_no=models.IntegerField()           # رقم الايصال
     type=models.CharField(max_length=25,choices=TYPE_TRANSACTION)
     date=models.DateField()
-    transation_no=models.IntegerField()
+    supplier=models.ForeignKey(Supplier,related_name='transactions_supplier',on_delete=models.SET_NULL,null=True,blank=True)
+    customer=models.ForeignKey(Customer,related_name='transactions_customer',on_delete=models.SET_NULL,null=True,blank=True)
+    code=models.CharField(max_length=25,null=True,blank=True)
+
     
     def __str__(self):
-        return str(self.store)
+        return str(self.reset_no)
+    
+  
+    
+class TranSItem(models.Model):
+    transaction=models.ForeignKey(Transaction,related_name='item_transactions',on_delete=models.CASCADE)
+    product=models.ForeignKey(Product,related_name='transaction_product',on_delete=models.SET_NULL,null=True,blank=True)
+    quantity=models.FloatField(default=0)
+    price=models.FloatField(default=0)
+    avg_price=models.FloatField(default=0)
+
+    def __str__(self):
+        return str(self.transaction)
+
+    @property
+    def total(self):
+        return self.price * self.quantity
+
+
+
+    
     
 
 
